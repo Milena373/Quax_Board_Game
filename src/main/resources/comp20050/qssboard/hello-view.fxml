@@ -9,7 +9,44 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2000.0" prefWidth="2000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.HelloController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="1125.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
+       <Label fx:id="turnLabel" layoutX="402.0" layoutY="95.0" style="-fx-font-family: 'Times New Roman'; -fx-font-size: 20px; -fx-font-weight: bold;" text="BLACK to play :)" />
+
+       <Polygon fx:id="turnOctagon" fill="BLACK" layoutX="423.0" layoutY="110.0" stroke="BLACK">
+           <points>
+               <Double fx:value="18.7" />
+               <Double fx:value="10.0" />
+               <Double fx:value="31.2" />
+               <Double fx:value="10.0" />
+               <Double fx:value="40.0" />
+               <Double fx:value="18.7" />
+               <Double fx:value="40.0" />
+               <Double fx:value="31.2" />
+               <Double fx:value="31.2" />
+               <Double fx:value="40.0" />
+               <Double fx:value="18.7" />
+               <Double fx:value="40.0" />
+               <Double fx:value="10.0" />
+               <Double fx:value="31.2" />
+               <Double fx:value="10.0" />
+               <Double fx:value="18.7" />
+           </points>
+       </Polygon>
+
+       <Polygon fx:id="turnRhombus" fill="BLACK" layoutX="465.0" layoutY="109.0" stroke="BLACK">
+           <points>
+               <Double fx:value="25.0" />
+               <Double fx:value="10.0" />
+               <Double fx:value="40.0" />
+               <Double fx:value="25.0" />
+               <Double fx:value="25.0" />
+               <Double fx:value="40.0" />
+               <Double fx:value="10.0" />
+               <Double fx:value="25.0" />
+           </points>
+       </Polygon>
+
+
+       <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="1125.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
       <Polygon fx:id="OctCell1" fill="#d0a60e" layoutX="214.0" layoutY="117.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
          <points>
