@@ -45,7 +45,6 @@
            </points>
        </Polygon>
 
-
        <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="1125.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
       <Polygon fx:id="OctCell1" fill="#d0a60e" layoutX="214.0" layoutY="117.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
