@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="917.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.HelloController">
+   <children>
+      <Polygon fx:id="OctCell1" fill="#d0a60e" layoutX="214.0" layoutY="117.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+        <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+        </points>
+      </Polygon>
+      <Polygon fx:id="RhoCell1" fill="#eeae0b" layoutX="258.0" layoutY="161.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+        <points>
+          <Double fx:value="100.0" />
+          <Double fx:value="64.9" />
+          <Double fx:value="135.1" />
+          <Double fx:value="100.0" />
+          <Double fx:value="100.0" />
+          <Double fx:value="135.1" />
+          <Double fx:value="64.9" />
+          <Double fx:value="100.0" />
+        </points>
+      </Polygon>
+      <Polygon fx:id="OctCell2" fill="#d0a60e" layoutX="303.0" layoutY="117.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell3" fill="#d0a60e" layoutX="214.0" layoutY="206.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="RhoCell2" fill="#eeae0b" layoutX="258.0" layoutY="250.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="100.0" />
+            <Double fx:value="64.9" />
+            <Double fx:value="135.1" />
+            <Double fx:value="100.0" />
+            <Double fx:value="100.0" />
+            <Double fx:value="135.1" />
+            <Double fx:value="64.9" />
+            <Double fx:value="100.0" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell4" fill="#d0a60e" layoutX="302.0" layoutY="206.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell5" fill="#d0a60e" layoutX="214.0" layoutY="294.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="RhoCell3" fill="#eeae0b" layoutX="258.0" layoutY="338.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="100.0" />
+            <Double fx:value="64.9" />
+            <Double fx:value="135.1" />
+            <Double fx:value="100.0" />
+            <Double fx:value="100.0" />
+            <Double fx:value="135.1" />
+            <Double fx:value="64.9" />
+            <Double fx:value="100.0" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell6" fill="#d0a60e" layoutX="303.0" layoutY="294.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell7" fill="#d0a60e" layoutX="214.0" layoutY="383.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="RhoCell4" fill="#eeae0b" layoutX="258.0" layoutY="427.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="100.0" />
+            <Double fx:value="64.9" />
+            <Double fx:value="135.1" />
+            <Double fx:value="100.0" />
+            <Double fx:value="100.0" />
+            <Double fx:value="135.1" />
+            <Double fx:value="64.9" />
+            <Double fx:value="100.0" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell8" fill="#d0a60e" layoutX="302.0" layoutY="383.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell9" fill="#d0a60e" layoutX="392.0" layoutY="117.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="RhoCell5" fill="#eeae0b" layoutX="436.0" layoutY="162.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="100.0" />
+            <Double fx:value="64.9" />
+            <Double fx:value="135.1" />
+            <Double fx:value="100.0" />
+            <Double fx:value="100.0" />
+            <Double fx:value="135.1" />
+            <Double fx:value="64.9" />
+            <Double fx:value="100.0" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell10" fill="#d0a60e" layoutX="481.0" layoutY="117.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell11" fill="#d0a60e" layoutX="391.0" layoutY="206.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="RhoCell6" fill="#eeae0b" layoutX="436.0" layoutY="250.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="100.0" />
+            <Double fx:value="64.9" />
+            <Double fx:value="135.1" />
+            <Double fx:value="100.0" />
+            <Double fx:value="100.0" />
+            <Double fx:value="135.1" />
+            <Double fx:value="64.9" />
+            <Double fx:value="100.0" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell12" fill="#d0a60e" layoutX="480.0" layoutY="206.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell13" fill="#d0a60e" layoutX="392.0" layoutY="294.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="RhoCell7" fill="#eeae0b" layoutX="436.0" layoutY="338.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="100.0" />
+            <Double fx:value="64.9" />
+            <Double fx:value="135.1" />
+            <Double fx:value="100.0" />
+            <Double fx:value="100.0" />
+            <Double fx:value="135.1" />
+            <Double fx:value="64.9" />
+            <Double fx:value="100.0" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell14" fill="#d0a60e" layoutX="481.0" layoutY="294.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell15" fill="#d0a60e" layoutX="392.0" layoutY="383.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="RhoCell8" fill="#eeae0b" layoutX="436.0" layoutY="427.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="100.0" />
+            <Double fx:value="64.9" />
+            <Double fx:value="135.1" />
+            <Double fx:value="100.0" />
+            <Double fx:value="100.0" />
+            <Double fx:value="135.1" />
+            <Double fx:value="64.9" />
+            <Double fx:value="100.0" />
+         </points>
+      </Polygon>
+      <Polygon fx:id="OctCell16" fill="#d0a60e" layoutX="480.0" layoutY="383.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
+         <points>
+            <Double fx:value="75.1" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="124.9" />
+            <Double fx:value="160.0" />
+            <Double fx:value="75.1" />
+            <Double fx:value="160.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="124.9" />
+            <Double fx:value="40.0" />
+            <Double fx:value="75.1" />
+         </points>
+      </Polygon>
+
+
+
+       <Label fx:id="turnLabel" layoutX="402.0" layoutY="95.0" style="-fx-font-family: 'Times New Roman'; -fx-font-size: 20px; -fx-font-weight: bold;" text="BLACK to play :)" />
+
+       <Polygon fx:id="turnOctagon" fill="BLACK" layoutX="423.0" layoutY="110.0" stroke="BLACK">
+           <points>
+               <Double fx:value="18.7" />
+               <Double fx:value="10.0" />
+               <Double fx:value="31.2" />
+               <Double fx:value="10.0" />
+               <Double fx:value="40.0" />
+               <Double fx:value="18.7" />
+               <Double fx:value="40.0" />
+               <Double fx:value="31.2" />
+               <Double fx:value="31.2" />
+               <Double fx:value="40.0" />
+               <Double fx:value="18.7" />
+               <Double fx:value="40.0" />
+               <Double fx:value="10.0" />
+               <Double fx:value="31.2" />
+               <Double fx:value="10.0" />
+               <Double fx:value="18.7" />
+           </points>
+       </Polygon>
+
+       <Polygon fx:id="turnRhombus" fill="BLACK" layoutX="670.0" layoutY="110.0" stroke="BLACK">
+           <points>
+               <Double fx:value="25.0" />
+               <Double fx:value="10.0" />
+               <Double fx:value="40.0" />
+               <Double fx:value="25.0" />
+               <Double fx:value="25.0" />
+               <Double fx:value="40.0" />
+               <Double fx:value="10.0" />
+               <Double fx:value="25.0" />
+           </points>
+       </Polygon>
+
+
+   </children>
+</AnchorPane>
