@@ -7,6 +7,7 @@ package comp20050.qssboard;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Polygon;
 
@@ -683,13 +684,52 @@ public class HelloController {
     @FXML // fx:id="RhoCell100"
     private Polygon RhoCell100; // Value injected by FXMLLoader
 
+    // added code
+    @FXML
+    private Label turnLabel;
+
+    @FXML
+    private Polygon turnOctagon;
+
+    @FXML
+    private Polygon turnRhombus;
+
+    private boolean isBlackTurn = true;
 
     @FXML
     void getCellID(MouseEvent event) {
         Polygon cell = (Polygon) event.getSource();
-        cell.setFill(BLACK);
-    }
 
+        // if cell has been clicked already
+        if (cell.getFill().equals(javafx.scene.paint.Color.BLACK) ||
+                cell.getFill().equals(javafx.scene.paint.Color.WHITE)) {
+            return;
+        }
+
+        // set color of clicked cell
+        if (isBlackTurn) {
+            cell.setFill(javafx.scene.paint.Color.BLACK);
+        } else {
+            cell.setFill(javafx.scene.paint.Color.WHITE);
+            cell.setStroke(javafx.scene.paint.Color.BLACK);
+        }
+
+        // switch turn
+        isBlackTurn = !isBlackTurn;
+
+        // update display for next player
+        if (isBlackTurn) {
+            turnLabel.setText("BLACK to play :)");
+            turnOctagon.setFill(javafx.scene.paint.Color.BLACK);
+            turnRhombus.setFill(javafx.scene.paint.Color.BLACK);
+        } else {
+            turnLabel.setText("WHITE to play :)");
+            turnOctagon.setFill(javafx.scene.paint.Color.WHITE);
+            turnOctagon.setStroke(javafx.scene.paint.Color.BLACK);
+            turnRhombus.setFill(javafx.scene.paint.Color.WHITE);
+            turnRhombus.setStroke(javafx.scene.paint.Color.BLACK);
+        }
+    }
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert OctCell1 != null : "fx:id=\"OctCell1\" was not injected: check your FXML file 'hello-view.fxml'.";
