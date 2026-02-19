@@ -13,7 +13,7 @@ import javafx.scene.shape.Polygon;
 
 import static javafx.scene.paint.Color.BLACK;
 
-public class HelloController {
+public class  HelloController {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -694,6 +694,31 @@ public class HelloController {
     @FXML
     private Polygon turnRhombus;
 
+    @FXML
+    private Label ModeLabel; // Tracking H Vs H or H vs B
+
+    @FXML
+    private void onHumanVsHuman(){
+        System.out.println("CLICKED: Human vs Human");
+
+        ModeLabel.setText("Human Vs Human");
+        GameControl.setGameMode(GameControl.GameMode.HUMAN_VS_HUMAN);
+        System.out.println("mode " +  GameControl.getGameMode());
+
+    }
+
+    @FXML
+    private void onHumanVsBot(){
+        System.out.println("CLICKED: Human vs Bot");
+
+        ModeLabel.setText("Human Vs Bot");
+        GameControl.setGameMode(GameControl.GameMode.HUMAN_VS_BOT);
+        System.out.println("mode " +  GameControl.getGameMode());
+
+    }
+
+
+
     private boolean isBlackTurn = true;
 
     @FXML
@@ -756,6 +781,7 @@ public class HelloController {
         assert RhoCell6 != null : "fx:id=\"RhoCell6\" was not injected: check your FXML file 'hello-view.fxml'.";
         assert RhoCell7 != null : "fx:id=\"RhoCell7\" was not injected: check your FXML file 'hello-view.fxml'.";
         assert RhoCell8 != null : "fx:id=\"RhoCell8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert ModeLabel != null : "fx:id=\"ModeLabel\" was not injected: check your FXML file 'hello-view.fxml'.";
 
     }
 

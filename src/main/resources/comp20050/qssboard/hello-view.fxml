@@ -9,6 +9,25 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1345.0" prefWidth="1493.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.HelloController">
    <children>
+       <HBox layoutX="0.0" layoutY="0.0" spacing="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+           <children>
+               <Label fx:id="gameModeSelect" style="-fx-font-family: 'Times New Roman'; -fx-font-size: 45px; -fx-font-weight: bold;" text="Select game mode: ">
+                   <font>
+                       <Font name="System Bold" size="45.0" />
+                   </font>
+               </Label>
+               <Button mnemonicParsing="false" onAction="#onHumanVsHuman" text="Human vs Human" style="-fx-font-size: 20px ;" prefHeight="50.0" prefWidth="200.0" />
+               <Button mnemonicParsing="false" onAction="#onHumanVsBot" text="Human vs Bot" style="-fx-font-size: 20px ;" prefHeight="50.0" prefWidth="200.0" />
+               <Label fx:id="ModeLabel" layoutX="20.0" layoutY="50.0" style="-fx-font-size: 24px ;">
+                   <font>
+                       <Font name="Blackadder ITC" size="36.0" />
+                   </font>
+               </Label>
+           </children>
+       </HBox>
+
+
+
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="1125.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
       <Polygon fx:id="OctCell1" fill="#d0a60e" layoutX="214.0" layoutY="117.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
