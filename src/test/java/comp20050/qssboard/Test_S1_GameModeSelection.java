@@ -19,7 +19,7 @@ public class Test_S1_GameModeSelection {
 
         assertEquals(GameControl.GameMode.HUMAN_VS_HUMAN, GameControl.getGameMode());
     }
-
+    @Test
     void setGameMode_onHumanVsBot(){
         GameControl controller = new GameControl();
         GameControl.setGameMode(GameControl.GameMode.HUMAN_VS_BOT);

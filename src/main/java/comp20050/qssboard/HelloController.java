@@ -7,6 +7,7 @@ package comp20050.qssboard;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Polygon;
@@ -698,12 +699,30 @@ public class  HelloController {
     private Label ModeLabel; // Tracking H Vs H or H vs B
 
     @FXML
+    private Label gameModeSelect;
+
+    @FXML
+    private Button HVsHButton;
+
+    @FXML
+    private Button HVsBButton;
+
+
+
+    @FXML
     private void onHumanVsHuman(){
         System.out.println("CLICKED: Human vs Human");
 
         ModeLabel.setText("Human Vs Human");
         GameControl.setGameMode(GameControl.GameMode.HUMAN_VS_HUMAN);
         System.out.println("mode " +  GameControl.getGameMode());
+        //disables the unclicked button so that user cant click another mode once mode is already chosen
+        HVsHButton.setDisable(false);
+        HVsBButton.setDisable(true);
+        gameModeSelect.setOpacity(0.4);
+
+
+
 
     }
 
@@ -714,6 +733,11 @@ public class  HelloController {
         ModeLabel.setText("Human Vs Bot");
         GameControl.setGameMode(GameControl.GameMode.HUMAN_VS_BOT);
         System.out.println("mode " +  GameControl.getGameMode());
+        //disables the unclicked button so that user cant click another mode once mode is already chosen
+        HVsHButton.setDisable(true);
+        HVsBButton.setDisable(false);
+        gameModeSelect.setOpacity(0.4);
+
 
     }
 
@@ -782,6 +806,10 @@ public class  HelloController {
         assert RhoCell7 != null : "fx:id=\"RhoCell7\" was not injected: check your FXML file 'hello-view.fxml'.";
         assert RhoCell8 != null : "fx:id=\"RhoCell8\" was not injected: check your FXML file 'hello-view.fxml'.";
         assert ModeLabel != null : "fx:id=\"ModeLabel\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert gameModeSelect != null : "fx:id=\"gameModeSelect\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert HVsHButton != null : "fx:id=\"HVsHButton\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert HVsBButton != null : "fx:id=\"HVsBButton\" was not injected: check your FXML file 'hello-view.fxml'.";
+
 
     }
 

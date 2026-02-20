@@ -24,8 +24,8 @@
            </children>
        </HBox>
 
-   <Button layoutX="14.0" layoutY="87.0" mnemonicParsing="false" onAction="#onHumanVsHuman" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ;" text="Human vs Human" />
-   <Button layoutX="225.0" layoutY="87.0" mnemonicParsing="false" onAction="#onHumanVsBot" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ;" text="Human vs Bot" />
+   <Button fx:id="HVsHButton" layoutY="87.0" mnemonicParsing="false" onAction="#onHumanVsHuman" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ;" text="Human vs Human" />
+   <Button fx:id="HvsBButton" layoutX="225.0" layoutY="87.0" mnemonicParsing="false" onAction="#onHumanVsBot" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ;" text="Human vs Bot" />
    <Group layoutX="300.0">
       <children>
          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="1033.0" layoutX="1220.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="62.0" />
