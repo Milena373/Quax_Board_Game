@@ -18,5 +18,5 @@ public class GameControl {
     }
 
     public static PlayerTurn getPlayerTurn() { return playerTurn; }
-    public static void setPlayerTurn(PlayerTurn playerTurn) { playerTurn = playerTurn; }
+    public static void setPlayerTurn(PlayerTurn turn) { playerTurn = turn; }
 }
