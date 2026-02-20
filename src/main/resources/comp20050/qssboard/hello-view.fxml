@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
 <?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1345.0" prefWidth="1493.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.HelloController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1340.0" prefWidth="1870.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.HelloController">
    <children>
-       <HBox layoutX="0.0" layoutY="0.0" spacing="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+       <HBox layoutX="0.0" layoutY="0.0" spacing="575.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
            <children>
                <Label fx:id="gameModeSelect" style="-fx-font-family: 'Times New Roman'; -fx-font-size: 45px; -fx-font-weight: bold;" text="Select game mode: ">
                    <font>
                        <Font name="System Bold" size="45.0" />
                    </font>
                </Label>
-               <Button mnemonicParsing="false" onAction="#onHumanVsHuman" text="Human vs Human" style="-fx-font-size: 20px ;" prefHeight="50.0" prefWidth="200.0" />
-               <Button mnemonicParsing="false" onAction="#onHumanVsBot" text="Human vs Bot" style="-fx-font-size: 20px ;" prefHeight="50.0" prefWidth="200.0" />
-               <Label fx:id="ModeLabel" layoutX="20.0" layoutY="50.0" style="-fx-font-size: 24px ;">
+               <Label fx:id="ModeLabel" layoutX="20.0" layoutY="50.0" style="-fx-font-size: 30px ;" underline="true">
                    <font>
                        <Font name="Blackadder ITC" size="36.0" />
                    </font>
@@ -26,10 +24,12 @@
            </children>
        </HBox>
 
-
-
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="1125.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
+   <Button layoutX="14.0" layoutY="87.0" mnemonicParsing="false" onAction="#onHumanVsHuman" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ;" text="Human vs Human" />
+   <Button layoutX="225.0" layoutY="87.0" mnemonicParsing="false" onAction="#onHumanVsBot" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ;" text="Human vs Bot" />
+   <Group layoutX="300.0">
+      <children>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="1125.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
+         <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
       <Polygon fx:id="OctCell1" fill="#d0a60e" layoutX="214.0" layoutY="117.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
          <points>
             <Double fx:value="75.1" />
@@ -3717,14 +3717,16 @@
             <Font size="30.0" />
          </font>
       </Label>
+      </children>
+   </Group>
 
 
-      <Label fx:id="turnLabel" layoutX="807.0" layoutY="1286.0" style="-fx-font-family: 'Times New Roman'; -fx-font-size: 25px; -fx-font-weight: bold;" text="&gt;  BLACK to play">
+      <Label fx:id="turnLabel" layoutX="1069.0" layoutY="1272.0" style="-fx-font-family: 'Times New Roman'; -fx-font-size: 25px; -fx-font-weight: bold;" text="BLACK to play">
          <font>
             <Font size="29.0" />
          </font></Label>
 
-      <Polygon fx:id="turnOctagon" fill="BLACK" layoutX="538.0" layoutY="1264.0" pickOnBounds="true" scaleX="2.5" scaleY="2.5" scaleZ="2.5" stroke="BLACK">
+      <Polygon fx:id="turnOctagon" fill="BLACK" layoutX="898.0" layoutY="1261.0" pickOnBounds="true" scaleX="2.5" scaleY="2.5" scaleZ="2.5" stroke="BLACK">
          <points>
             <Double fx:value="18.7" />
             <Double fx:value="10.0" />
@@ -3745,7 +3747,7 @@
          </points>
       </Polygon>
 
-      <Polygon fx:id="turnRhombus" fill="BLACK" layoutX="632.0" layoutY="1272.0" pickOnBounds="true" scaleX="1.5" scaleY="1.5" scaleZ="1.5" stroke="BLACK">
+      <Polygon fx:id="turnRhombus" fill="BLACK" layoutX="989.0" layoutY="1263.0" pickOnBounds="true" scaleX="1.5" scaleY="1.5" scaleZ="1.5" stroke="BLACK">
          <points>
             <Double fx:value="25.0" />
             <Double fx:value="10.0" />
@@ -3757,7 +3759,6 @@
             <Double fx:value="25.0" />
          </points>
       </Polygon>
-      <Line endX="100.0" layoutX="700.0" layoutY="1298.0" />
 
    </children>
 </AnchorPane>
