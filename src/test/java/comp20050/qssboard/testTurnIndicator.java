@@ -32,7 +32,7 @@ public class testTurnIndicator extends ApplicationTest {
     @Test
     void testCellClickChangesColor() {
         // find polygon by its fx:id
-        Polygon cell = lookup("#RhoCell1").queryAs(Polygon.class);
+        Polygon cell = lookup("#OctCell1").queryAs(Polygon.class);
 
         // simulate a real mouse click
         clickOn(cell);
