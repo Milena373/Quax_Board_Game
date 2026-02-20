@@ -28,6 +28,8 @@
    <Button layoutX="225.0" layoutY="87.0" mnemonicParsing="false" onAction="#onHumanVsBot" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ;" text="Human vs Bot" />
    <Group layoutX="300.0">
       <children>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="1033.0" layoutX="1220.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="62.0" />
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="1033.0" layoutX="240.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="62.0" />
          <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="1125.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
          <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
       <Polygon fx:id="OctCell1" fill="#d0a60e" layoutX="214.0" layoutY="117.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
