@@ -744,11 +744,11 @@ public class  HelloController {
 
         // update display for next player
         if (isBlackTurn) {
-            turnLabel.setText("BLACK to play :)");
+            turnLabel.setText("BLACK to play");
             turnOctagon.setFill(javafx.scene.paint.Color.BLACK);
             turnRhombus.setFill(javafx.scene.paint.Color.BLACK);
         } else {
-            turnLabel.setText("WHITE to play :)");
+            turnLabel.setText("WHITE to play");
             turnOctagon.setFill(javafx.scene.paint.Color.WHITE);
             turnOctagon.setStroke(javafx.scene.paint.Color.BLACK);
             turnRhombus.setFill(javafx.scene.paint.Color.WHITE);
