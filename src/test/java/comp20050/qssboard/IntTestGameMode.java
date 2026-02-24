@@ -18,6 +18,8 @@ public class IntTestGameMode extends ApplicationTest {
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+        stage.setX(0);
+        stage.setY(0);
         stage.setScene(scene);
         stage.show();
     }
@@ -40,7 +42,7 @@ public class IntTestGameMode extends ApplicationTest {
 
         assertEquals("Human Vs Human", modeLabel.getText());
         assertFalse(hvsh.isDisabled());
-        assertFalse(hvsb.isDisabled());
+        assertTrue(hvsb.isDisabled());
         assertEquals(0.4, selectionLabel.getOpacity(), 0.0001);
         assertEquals(GameControl.getGameMode(), GameControl.GameMode.HUMAN_VS_HUMAN); // testing the internal logic as well
 
@@ -57,7 +59,7 @@ public class IntTestGameMode extends ApplicationTest {
 
         assertEquals("Human Vs Bot", modeLabel.getText());
         assertFalse(hvsb.isDisabled());
-        assertFalse(hvsh.isDisabled());
+        assertTrue(hvsh.isDisabled());
         assertEquals(0.4, selectionLabel.getOpacity(), 0.0001);
         assertEquals(GameControl.getGameMode(), GameControl.GameMode.HUMAN_VS_BOT); // testing the internal logic as well
 
@@ -69,7 +71,7 @@ public class IntTestGameMode extends ApplicationTest {
         var hvsh = lookup("#HVsHButton").queryAs(javafx.scene.control.Button.class);
         var hvsb = lookup("#HVsBButton").queryAs(javafx.scene.control.Button.class);
         var modeLabel = lookup("#ModeLabel").queryAs(javafx.scene.control.Label.class);
-        assertTrue(hvsb.isDisable());
+        assertTrue(hvsb.isDisabled());
 
         //lets see if it changed back
         clickOn("#HVsBButton");
