@@ -30,7 +30,7 @@ public class UnitIntTestTurnIndicator extends ApplicationTest {
     }
 
     @Test
-    void testCellClickChangesColor() {
+    void testCellClickChangesColour() {
         // find polygon by its fx:id
         Polygon cell = lookup("#OctCell1").queryAs(Polygon.class);
 
@@ -43,7 +43,7 @@ public class UnitIntTestTurnIndicator extends ApplicationTest {
 
     @Test
     void testTurnIndicatorUpdates() {
-        // perform click
+        // click cell
         clickOn("#RhoCell1");
 
         // verify label text matches logic
@@ -51,7 +51,7 @@ public class UnitIntTestTurnIndicator extends ApplicationTest {
     }
 
     @Test
-    void testCellColorCannotBeOverwritten() {
+    void testCellColourCannotBeOverwritten() {
         Polygon cell = lookup("#RhoCell1").queryAs(Polygon.class);
 
         // first click (black's turn)

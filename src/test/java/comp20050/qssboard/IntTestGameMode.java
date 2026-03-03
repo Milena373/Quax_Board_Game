@@ -16,6 +16,8 @@ public class IntTestGameMode extends ApplicationTest {
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(QuaxApplication.class.getResource("quax-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+        stage.setX(0);
+        stage.setY(0);
         stage.setScene(scene);
         stage.show();
     }
@@ -67,7 +69,7 @@ public class IntTestGameMode extends ApplicationTest {
         var hvsh = lookup("#HVsHButton").queryAs(javafx.scene.control.Button.class);
         var hvsb = lookup("#HVsBButton").queryAs(javafx.scene.control.Button.class);
         var modeLabel = lookup("#ModeLabel").queryAs(javafx.scene.control.Label.class);
-        assertTrue(hvsb.isDisable());
+        assertTrue(hvsb.isDisabled());
 
         //lets see if it changed back
         clickOn("#HVsBButton");
