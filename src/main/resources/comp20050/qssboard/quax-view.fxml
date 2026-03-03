@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1340.0" prefWidth="1870.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.HelloController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1340.0" prefWidth="1870.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.QuaxController">
    <children>
        <HBox layoutX="0.0" layoutY="0.0" spacing="575.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
            <children>

@@ -1,5 +1,5 @@
 /**
- * Sample Skeleton for 'hello-view.fxml' Controller Class
+ * Sample Skeleton for 'quax-view.fxml' Controller Class
  */
 
 package comp20050.qssboard;
@@ -12,9 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Polygon;
 
-import static javafx.scene.paint.Color.BLACK;
-
-public class  HelloController {
+public class QuaxController {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -781,34 +779,34 @@ public class  HelloController {
     }
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        assert OctCell1 != null : "fx:id=\"OctCell1\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell10 != null : "fx:id=\"OctCell10\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell11 != null : "fx:id=\"OctCell11\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell12 != null : "fx:id=\"OctCell12\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell13 != null : "fx:id=\"OctCell13\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell14 != null : "fx:id=\"OctCell14\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell15 != null : "fx:id=\"OctCell15\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell16 != null : "fx:id=\"OctCell16\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell2 != null : "fx:id=\"OctCell2\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell3 != null : "fx:id=\"OctCell3\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell4 != null : "fx:id=\"OctCell4\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell5 != null : "fx:id=\"OctCell5\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell6 != null : "fx:id=\"OctCell6\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell7 != null : "fx:id=\"OctCell7\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell8 != null : "fx:id=\"OctCell8\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell9 != null : "fx:id=\"OctCell9\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert RhoCell1 != null : "fx:id=\"RhoCell1\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert RhoCell2 != null : "fx:id=\"RhoCell2\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert RhoCell3 != null : "fx:id=\"RhoCell3\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert RhoCell4 != null : "fx:id=\"RhoCell4\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert RhoCell5 != null : "fx:id=\"RhoCell5\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert RhoCell6 != null : "fx:id=\"RhoCell6\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert RhoCell7 != null : "fx:id=\"RhoCell7\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert RhoCell8 != null : "fx:id=\"RhoCell8\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert ModeLabel != null : "fx:id=\"ModeLabel\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert gameModeSelect != null : "fx:id=\"gameModeSelect\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert HVsHButton != null : "fx:id=\"HVsHButton\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert HVsBButton != null : "fx:id=\"HVsBButton\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell1 != null : "fx:id=\"OctCell1\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell10 != null : "fx:id=\"OctCell10\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell11 != null : "fx:id=\"OctCell11\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell12 != null : "fx:id=\"OctCell12\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell13 != null : "fx:id=\"OctCell13\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell14 != null : "fx:id=\"OctCell14\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell15 != null : "fx:id=\"OctCell15\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell16 != null : "fx:id=\"OctCell16\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell2 != null : "fx:id=\"OctCell2\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell3 != null : "fx:id=\"OctCell3\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell4 != null : "fx:id=\"OctCell4\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell5 != null : "fx:id=\"OctCell5\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell6 != null : "fx:id=\"OctCell6\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell7 != null : "fx:id=\"OctCell7\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell8 != null : "fx:id=\"OctCell8\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert OctCell9 != null : "fx:id=\"OctCell9\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert RhoCell1 != null : "fx:id=\"RhoCell1\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert RhoCell2 != null : "fx:id=\"RhoCell2\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert RhoCell3 != null : "fx:id=\"RhoCell3\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert RhoCell4 != null : "fx:id=\"RhoCell4\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert RhoCell5 != null : "fx:id=\"RhoCell5\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert RhoCell6 != null : "fx:id=\"RhoCell6\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert RhoCell7 != null : "fx:id=\"RhoCell7\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert RhoCell8 != null : "fx:id=\"RhoCell8\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert ModeLabel != null : "fx:id=\"ModeLabel\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert gameModeSelect != null : "fx:id=\"gameModeSelect\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert HVsHButton != null : "fx:id=\"HVsHButton\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert HVsBButton != null : "fx:id=\"HVsBButton\" was not injected: check your FXML file 'quax-view.fxml'.";
 
 
     }

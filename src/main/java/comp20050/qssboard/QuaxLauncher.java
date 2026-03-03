@@ -2,8 +2,8 @@ package comp20050.qssboard;
 
 import javafx.application.Application;
 
-public class Launcher {
+public class QuaxLauncher {
     public static void main(String[] args) {
-        Application.launch(HelloApplication.class, args);
+        Application.launch(QuaxApplication.class, args);
     }
 }

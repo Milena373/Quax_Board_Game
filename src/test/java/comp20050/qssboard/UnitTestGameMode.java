@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class Test_S1_GameModeSelection {
+public class UnitTestGameMode {
     @Test
     void setGameMode_onHumanVsHuman(){
         GameControl controller = new GameControl();

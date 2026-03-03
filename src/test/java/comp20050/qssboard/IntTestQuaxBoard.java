@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Integration tests following a "BoardA -> logic -> BoardB" approach.
  * These validate the internal board representation (QuaxBoard) that the GUI renders.
  */
-public class QuaxBoardIntegrationTest {
+public class IntTestQuaxBoard {
 
     @Test
     void initialBoard_is21x21() {

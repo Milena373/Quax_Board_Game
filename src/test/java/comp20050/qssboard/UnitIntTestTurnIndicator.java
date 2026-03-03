@@ -12,7 +12,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 
-public class testTurnIndicator extends ApplicationTest {
+public class UnitIntTestTurnIndicator extends ApplicationTest {
 
     @Test
     void testTurnToggle() {
@@ -23,7 +23,7 @@ public class testTurnIndicator extends ApplicationTest {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(QuaxApplication.class.getResource("quax-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.show();
