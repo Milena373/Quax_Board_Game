@@ -683,7 +683,6 @@ public class QuaxController {
     @FXML // fx:id="RhoCell100"
     private Polygon RhoCell100; // Value injected by FXMLLoader
 
-    // added code
     @FXML
     private Label turnLabel;
 
@@ -710,8 +709,7 @@ public class QuaxController {
     private Player player1 ; // players of the code
     private Player player2 ;
 
-
-
+    //Updating the mode of the game
     @FXML
     private void onHumanVsHuman(){
         System.out.println("CLICKED: Human vs Human");
@@ -723,10 +721,6 @@ public class QuaxController {
         HVsHButton.setDisable(false);
         HVsBButton.setDisable(true);
         gameModeSelect.setOpacity(0.4);
-
-
-
-
     }
 
     @FXML
@@ -740,27 +734,18 @@ public class QuaxController {
         HVsHButton.setDisable(true);
         HVsBButton.setDisable(false);
         gameModeSelect.setOpacity(0.4);
-
-
     }
 
-    private boolean pieDecisionPending = false;//checking if the decision is yet to be made or not , true after the 1st move until white decides
-    private boolean pieUsedOrDeclined = false; // A decision has been made : used / declined
-    private Polygon firstMoveCell = null ; // the tile the black player chose
-
-
-
-
+    private boolean pieRuleActivatedOrDeclined = false; // A decision has been made : used / declined
     private boolean isBlackTurn = true;
-    private int noOfTurns = 0;
 
     @FXML
+
     void getCellID(MouseEvent event) {
         Polygon cell = (Polygon) event.getSource();
 
-        //if white has chosen to play normally , then they have declined the pie rule => button should be hidden
-        if(pieDecisionPending && !pieUsedOrDeclined &&!isBlackTurn){
-
+        //Pie Rule has been activated and it's white's turn , then hide the button
+        if(pieRuleActivatedOrDeclined &&!isBlackTurn){
             hidePieButton();
         }
 
@@ -769,34 +754,22 @@ public class QuaxController {
                 cell.getFill().equals(javafx.scene.paint.Color.WHITE)) {
             return;
         }
-        noOfTurns++; // increament the number of turns
-
         // set color of clicked cell
         if (isBlackTurn) {
             cell.setFill(javafx.scene.paint.Color.BLACK);
-
+                //should pie Rule after the 1st turn
+            if (!pieRuleActivatedOrDeclined) {
+                showPieButton();
+                pieRuleActivatedOrDeclined = true; // This allows us to hide the button after white decides to decline the pie Rule
+            }
         } else {
             cell.setFill(javafx.scene.paint.Color.WHITE);
             cell.setStroke(javafx.scene.paint.Color.BLACK);
         }
-
-        //when it is tge 1st move (Black)
-        if(noOfTurns == 1){
-            firstMoveCell = cell;
-
-            //Now its going to be white's turn , we need to show the pie rule
-            pieDecisionPending = true; // time for white to choose
-            pieUsedOrDeclined = false;
-            showPieButton();
-        }
-
         // switch turn
         isBlackTurn = !isBlackTurn;
-
-
         // update display for next player
         updateTurnDisplay();
-
     }
 
     //helper method to update display for next player
@@ -812,7 +785,6 @@ public class QuaxController {
             turnOctagon.setStroke(javafx.scene.paint.Color.BLACK);
             turnRhombus.setFill(javafx.scene.paint.Color.WHITE);
             turnRhombus.setStroke(javafx.scene.paint.Color.BLACK);
-
         }
     }
 
@@ -821,39 +793,28 @@ public class QuaxController {
         pieRuleButton.setVisible(true);
         pieRuleButton.setManaged(true);
         pieRuleButton.toFront();
-
     }
 
     //method to hide the pie Rule button
     private void hidePieButton(){
-        pieDecisionPending = false;
-        pieUsedOrDeclined = true;
+        pieRuleActivatedOrDeclined = true;
         pieRuleButton.setVisible(false);
         pieRuleButton.setManaged(false);
     }
 
     @FXML
     private void onPieRule(){
-        if(!pieDecisionPending || pieUsedOrDeclined){
-            return; // because pie rule has already been activated or
-        }
 
         if(isBlackTurn){
             return; // pie rule should only be used when it is white's turn
         }
-
         //swap the colors of plays
         GameControl.PlayerTurn temp=player1.getPlayerColor();
         player1.setPlayerColor(player2.getPlayerColor());
         player2.setPlayerColor(temp);
 
-
         //Hide the button after decision
-        pieDecisionPending = false;
-        pieUsedOrDeclined = true;
-        pieRuleButton.setVisible(false);
-        pieRuleButton.setManaged(false);
-
+        hidePieButton();
         isBlackTurn = false; // WHITE to play next (player1 after swap)
         updateTurnDisplay();
 

@@ -11,7 +11,7 @@
    <children>
        <HBox layoutX="0.0" layoutY="0.0" spacing="575.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
            <children>
-               <Label fx:id="gameModeSelect" style="-fx-font-family: 'Times New Roman'; -fx-font-size: 45px; -fx-font-weight: bold;" text="Select game mode : ">
+               <Label fx:id="gameModeSelect" style="-fx-font-family: 'Times New Roman'; -fx-font-size: 45px; -fx-font-weight: bold;" text="Select game mode  : ">
                    <font>
                        <Font name="System Bold" size="45.0" />
                    </font>
