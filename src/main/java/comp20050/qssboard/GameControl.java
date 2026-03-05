@@ -8,6 +8,7 @@ public class GameControl {
     private static GameMode gameMode;// Human Vs Human or Human Vs Bot
     private static PlayerTurn playerTurn;
 
+
     public GameControl() {}
 
     public static GameMode getGameMode() {
