@@ -7,11 +7,11 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1340.0" prefWidth="1870.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.QuaxController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1340.0" prefWidth="1870.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.QuaxController">
    <children>
        <HBox layoutX="0.0" layoutY="0.0" spacing="575.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
            <children>
-               <Label fx:id="gameModeSelect" style="-fx-font-family: 'Times New Roman'; -fx-font-size: 45px; -fx-font-weight: bold;" text="Select game mode: ">
+               <Label fx:id="gameModeSelect" style="-fx-font-family: 'Times New Roman'; -fx-font-size: 45px; -fx-font-weight: bold;" text="Select game mode : ">
                    <font>
                        <Font name="System Bold" size="45.0" />
                    </font>
@@ -26,7 +26,9 @@
 
    <Button fx:id="HVsHButton" layoutY="87.0" mnemonicParsing="false" onAction="#onHumanVsHuman" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ;" text="Human vs Human" />
    <Button fx:id="HVsBButton" layoutX="225.0" layoutY="87.0" mnemonicParsing="false" onAction="#onHumanVsBot" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ;" text="Human vs Bot" />
-   <Group layoutX="300.0">
+
+
+       <Group layoutX="300.0">
       <children>
          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="1033.0" layoutX="1220.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="62.0" />
          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="1033.0" layoutX="240.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="62.0" />
@@ -3818,6 +3820,8 @@
             <Double fx:value="25.0" />
          </points>
       </Polygon>
+
+       <Button fx:id="pieRuleButton" visible="false" managed="false" layoutX="1500.0" layoutY="1260.0" mnemonicParsing="false" onAction="#onPieRule" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ; -fx-background-color: #F9A8D4; -fx-border-color: black; -fx-border-width: 2" text="Activate Pie Rule"  />
 
    </children>
 </AnchorPane>

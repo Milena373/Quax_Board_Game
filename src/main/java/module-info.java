@@ -7,6 +7,8 @@ module comp20050.qssboard {
     requires com.dlsc.formsfx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires javafx.graphics;
+
 
     requires org.testfx.junit5;
     requires org.testfx;

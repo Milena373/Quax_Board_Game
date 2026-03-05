@@ -705,6 +705,11 @@ public class QuaxController {
     @FXML
     private Button HVsBButton;
 
+    @FXML private Button pieRuleButton;
+
+    private Player player1 ; // players of the code
+    private Player player2 ;
+
 
 
     @FXML
@@ -739,43 +744,119 @@ public class QuaxController {
 
     }
 
+    private boolean pieDecisionPending = false;//checking if the decision is yet to be made or not , true after the 1st move until white decides
+    private boolean pieUsedOrDeclined = false; // A decision has been made : used / declined
+    private Polygon firstMoveCell = null ; // the tile the black player chose
+
+
 
 
     private boolean isBlackTurn = true;
+    private int noOfTurns = 0;
 
     @FXML
     void getCellID(MouseEvent event) {
         Polygon cell = (Polygon) event.getSource();
+
+        //if white has chosen to play normally , then they have declined the pie rule => button should be hidden
+        if(pieDecisionPending && !pieUsedOrDeclined &&!isBlackTurn){
+
+            hidePieButton();
+        }
 
         // if cell has been clicked already
         if (cell.getFill().equals(javafx.scene.paint.Color.BLACK) ||
                 cell.getFill().equals(javafx.scene.paint.Color.WHITE)) {
             return;
         }
+        noOfTurns++; // increament the number of turns
 
         // set color of clicked cell
         if (isBlackTurn) {
             cell.setFill(javafx.scene.paint.Color.BLACK);
+
         } else {
             cell.setFill(javafx.scene.paint.Color.WHITE);
             cell.setStroke(javafx.scene.paint.Color.BLACK);
         }
 
+        //when it is tge 1st move (Black)
+        if(noOfTurns == 1){
+            firstMoveCell = cell;
+
+            //Now its going to be white's turn , we need to show the pie rule
+            pieDecisionPending = true; // time for white to choose
+            pieUsedOrDeclined = false;
+            showPieButton();
+        }
+
         // switch turn
         isBlackTurn = !isBlackTurn;
 
+
         // update display for next player
+        updateTurnDisplay();
+
+    }
+
+    //helper method to update display for next player
+    private void updateTurnDisplay(){
         if (isBlackTurn) {
             turnLabel.setText("BLACK to play");
             turnOctagon.setFill(javafx.scene.paint.Color.BLACK);
             turnRhombus.setFill(javafx.scene.paint.Color.BLACK);
+
         } else {
             turnLabel.setText("WHITE to play");
             turnOctagon.setFill(javafx.scene.paint.Color.WHITE);
             turnOctagon.setStroke(javafx.scene.paint.Color.BLACK);
             turnRhombus.setFill(javafx.scene.paint.Color.WHITE);
             turnRhombus.setStroke(javafx.scene.paint.Color.BLACK);
+
         }
+    }
+
+    //method to show the pie Rule button
+    private void showPieButton(){
+        pieRuleButton.setVisible(true);
+        pieRuleButton.setManaged(true);
+        pieRuleButton.toFront();
+
+    }
+
+    //method to hide the pie Rule button
+    private void hidePieButton(){
+        pieDecisionPending = false;
+        pieUsedOrDeclined = true;
+        pieRuleButton.setVisible(false);
+        pieRuleButton.setManaged(false);
+    }
+
+    @FXML
+    private void onPieRule(){
+        if(!pieDecisionPending || pieUsedOrDeclined){
+            return; // because pie rule has already been activated or
+        }
+
+        if(isBlackTurn){
+            return; // pie rule should only be used when it is white's turn
+        }
+
+        //swap the colors of plays
+        GameControl.PlayerTurn temp=player1.getPlayerColor();
+        player1.setPlayerColor(player2.getPlayerColor());
+        player2.setPlayerColor(temp);
+
+
+        //Hide the button after decision
+        pieDecisionPending = false;
+        pieUsedOrDeclined = true;
+        pieRuleButton.setVisible(false);
+        pieRuleButton.setManaged(false);
+
+        isBlackTurn = false; // WHITE to play next (player1 after swap)
+        updateTurnDisplay();
+
     }
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
@@ -807,8 +888,9 @@ public class QuaxController {
         assert gameModeSelect != null : "fx:id=\"gameModeSelect\" was not injected: check your FXML file 'quax-view.fxml'.";
         assert HVsHButton != null : "fx:id=\"HVsHButton\" was not injected: check your FXML file 'quax-view.fxml'.";
         assert HVsBButton != null : "fx:id=\"HVsBButton\" was not injected: check your FXML file 'quax-view.fxml'.";
-
-
+        assert pieRuleButton != null : "fx:id=\"pieRuleButton\" was not injected: check your FXML file 'quax-view.fxml'.";
+        player1 = new Player(GameControl.PlayerTurn.BLACK);
+        player2 = new Player(GameControl.PlayerTurn.WHITE);
     }
 
 }

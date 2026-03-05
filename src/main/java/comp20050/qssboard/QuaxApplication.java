@@ -12,7 +12,10 @@ import java.io.IOException;
 public class QuaxApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(QuaxApplication.class.getResource("quax-view.fxml"));
+        var url = QuaxApplication.class.getResource("/comp20050/qssboard/quax-view.fxml");
+        //System.err.println("FXML url = " + url);
+        FXMLLoader fxmlLoader = new FXMLLoader(url);
+
 
         // 1. Load your board as a Pane
         Pane board = fxmlLoader.load();

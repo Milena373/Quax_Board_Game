@@ -124,7 +124,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>comp20050.qssboard/comp20050.qssboard.HelloApplication</mainClass>
+                            <mainClass>comp20050.qssboard/comp20050.qssboard.QuaxApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
