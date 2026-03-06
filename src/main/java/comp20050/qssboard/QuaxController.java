@@ -702,8 +702,8 @@ public class QuaxController {
     @FXML
     private Button HVsHButton;
 
-    @FXML
-    private Button HVsBButton;
+    //@FXML
+    //private Button HVsBButton;
 
     @FXML private Button pieRuleButton;
 
@@ -720,22 +720,22 @@ public class QuaxController {
         System.out.println("mode " +  GameControl.getGameMode());
         //disables the unclicked button so that user cant click another mode once mode is already chosen
         HVsHButton.setDisable(false);
-        HVsBButton.setDisable(true);
+        //HVsBButton.setDisable(true);
         gameModeSelect.setOpacity(0.4);
     }
 
-    @FXML
-    private void onHumanVsBot(){
-        System.out.println("CLICKED: Human vs Bot");
-
-        ModeLabel.setText("Human Vs Bot");
-        GameControl.setGameMode(GameControl.GameMode.HUMAN_VS_BOT);
-        System.out.println("mode " +  GameControl.getGameMode());
-        //disables the unclicked button so that user cant click another mode once mode is already chosen
-        HVsHButton.setDisable(true);
-        HVsBButton.setDisable(false);
-        gameModeSelect.setOpacity(0.4);
-    }
+//    @FXML
+//    private void onHumanVsBot(){
+//        System.out.println("CLICKED: Human vs Bot");
+//
+//        ModeLabel.setText("Human Vs Bot");
+//        GameControl.setGameMode(GameControl.GameMode.HUMAN_VS_BOT);
+//        System.out.println("mode " +  GameControl.getGameMode());
+//        //disables the unclicked button so that user cant click another mode once mode is already chosen
+//        HVsHButton.setDisable(true);
+//        HVsBButton.setDisable(false);
+//        gameModeSelect.setOpacity(0.4);
+//    }
 
     private boolean pieRuleAvailable = true;
     private boolean isBlackTurn = true;
@@ -926,7 +926,7 @@ public class QuaxController {
         assert ModeLabel != null : "fx:id=\"ModeLabel\" was not injected: check your FXML file 'quax-view.fxml'.";
         assert gameModeSelect != null : "fx:id=\"gameModeSelect\" was not injected: check your FXML file 'quax-view.fxml'.";
         assert HVsHButton != null : "fx:id=\"HVsHButton\" was not injected: check your FXML file 'quax-view.fxml'.";
-        assert HVsBButton != null : "fx:id=\"HVsBButton\" was not injected: check your FXML file 'quax-view.fxml'.";
+        //assert HVsBButton != null : "fx:id=\"HVsBButton\" was not injected: check your FXML file 'quax-view.fxml'.";
         assert pieRuleButton != null : "fx:id=\"pieRuleButton\" was not injected: check your FXML file 'quax-view.fxml'.";
         player1 = new Player(GameControl.PlayerTurn.BLACK);
         player2 = new Player(GameControl.PlayerTurn.WHITE);

@@ -19,12 +19,12 @@ public class UnitTestGameMode {
 
         assertEquals(GameControl.GameMode.HUMAN_VS_HUMAN, GameControl.getGameMode());
     }
-    @Test
-    void setGameMode_onHumanVsBot(){
-        GameControl controller = new GameControl();
-        GameControl.setGameMode(GameControl.GameMode.HUMAN_VS_BOT);
-
-        assertNotEquals(GameControl.GameMode.HUMAN_VS_HUMAN, GameControl.getGameMode());
-    }
+//    @Test
+//    void setGameMode_onHumanVsBot(){
+//        GameControl controller = new GameControl();
+//        GameControl.setGameMode(GameControl.GameMode.HUMAN_VS_BOT);
+//
+//        assertNotEquals(GameControl.GameMode.HUMAN_VS_HUMAN, GameControl.getGameMode());
+//    }
 
 }
