@@ -3821,7 +3821,7 @@
          </points>
       </Polygon>
 
-       <Button fx:id="pieRuleButton" visible="false" managed="false" layoutX="1500.0" layoutY="1260.0" mnemonicParsing="false" onAction="#onPieRule" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ; -fx-background-color: #F9A8D4; -fx-border-color: black; -fx-border-width: 2" text="Activate Pie Rule"  />
+       <Button fx:id="pieRuleButton" visible="false" layoutX="225.0" layoutY="240.0" onAction="#onPieRule" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ; -fx-background-color: #F9A8D4; -fx-border-color: black; -fx-border-width: 2" text="Activate Pie Rule"  />
 
    </children>
 </AnchorPane>

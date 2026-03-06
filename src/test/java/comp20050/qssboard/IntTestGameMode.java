@@ -1,8 +1,10 @@
 package comp20050.qssboard;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -10,7 +12,6 @@ import org.testfx.framework.junit5.ApplicationTest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 public class IntTestGameMode extends ApplicationTest {
-    //private QuaxController cont;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -76,5 +77,6 @@ public class IntTestGameMode extends ApplicationTest {
         assertEquals("Human Vs Human",modeLabel.getText());
         assertEquals(GameControl.GameMode.HUMAN_VS_HUMAN, GameControl.getGameMode());
     }
-    
+
+
 }
