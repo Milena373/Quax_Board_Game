@@ -813,10 +813,6 @@ public class QuaxController {
         hidePieButton();
         pieRuleAvailable = false;
         updateTurnDisplay();
-
-//        System.out.println("Pie rule clicked");
-//        System.out.println("Visible: " + pieRuleButton.isVisible());
-//        System.out.println("Disabled: " + pieRuleButton.isDisabled());
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
