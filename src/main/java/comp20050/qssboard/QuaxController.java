@@ -5,7 +5,8 @@
 package comp20050.qssboard;
 
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -748,9 +749,11 @@ public class QuaxController {
                 cell.getFill().equals(javafx.scene.paint.Color.WHITE)) {
             return;
         }
-        // set color of clicked cell
+        // set color of clicked cell and capture current player colour
+        javafx.scene.paint.Color currentColor;
         if (isBlackTurn) {
             cell.setFill(javafx.scene.paint.Color.BLACK);
+            currentColor = javafx.scene.paint.Color.BLACK;
             //should pie Rule after the 1st turn
             if (pieRuleAvailable) {
                 showPieButton();
@@ -758,16 +761,95 @@ public class QuaxController {
         } else {
             cell.setFill(javafx.scene.paint.Color.WHITE);
             cell.setStroke(javafx.scene.paint.Color.BLACK);
-
+            currentColor = javafx.scene.paint.Color.WHITE;
             if (pieRuleAvailable) {
                 hidePieButton();
                 pieRuleAvailable = false;
             }
         }
+
+        // detect connected chain from clicked cell
+        String clickedID = cell.getId();
+        if (clickedID.startsWith("OctCell")) {
+            List<String> chain = getConnectedChain(clickedID, currentColor);
+            System.out.println("Connected chain from " + clickedID + ": " + chain);
+        }
+
         // switch turn
         isBlackTurn = !isBlackTurn;
         // update display for next player
         updateTurnDisplay();
+    }
+
+    // converts OctCell ID to row/col (0-indexed)
+    private int[] octToRowCol(int id) {
+        return new int[]{(id - 1) / 11, (id - 1) % 11};
+    }
+
+    // converts row/col to OctCell ID
+    private int rowColToOct(int row, int col) {
+        return row * 11 + col + 1;
+    }
+
+    // gets the RhoCell ID between two diagonally adjacent octagons
+    private int getRhoCellID(int row1, int col1, int row2, int col2) {
+        int rhoRow = Math.min(row1, row2);
+        int rhoCol = Math.min(col1, col2);
+        return rhoRow * 10 + rhoCol + 1;
+    }
+
+    // checks if a cell is owned by the given colour
+    private boolean isOwnedBy(String cellID, javafx.scene.paint.Color color) {
+        Polygon cell = (Polygon) OctCell1.getScene().lookup("#" + cellID);
+        return cell != null && cell.getFill().equals(color);
+    }
+
+    public List<String> getConnectedChain(String startCellID, javafx.scene.paint.Color playerColor) {
+        List<String> visited = new ArrayList<>();
+        Queue<String> queue = new LinkedList<>();
+
+        // only works for OctCells as start
+        if (!startCellID.startsWith("OctCell")) return visited;
+        if (!isOwnedBy(startCellID, playerColor)) return visited;
+
+        queue.add(startCellID);
+        visited.add(startCellID);
+
+        while (!queue.isEmpty()) {
+            String current = queue.poll();
+            int id = Integer.parseInt(current.replace("OctCell", ""));
+            int[] rc = octToRowCol(id);
+            int row = rc[0], col = rc[1];
+
+            // horizontal/vertical neighbours
+            int[][] directOffsets = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+            for (int[] off : directOffsets) {
+                int newRow = row + off[0];
+                int newCol = col + off[1];
+                if (newRow < 0 || newRow > 10 || newCol < 0 || newCol > 10) continue;
+                String nID = "OctCell" + rowColToOct(newRow, newCol);
+                if (!visited.contains(nID) && isOwnedBy(nID, playerColor)) {
+                    visited.add(nID);
+                    queue.add(nID);
+                }
+            }
+
+            // diagonal neighbours - only if same colour RhoCell bridge exists
+            int[][] diagOffsets = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+            for (int[] off : diagOffsets) {
+                int newRow = row + off[0];
+                int newCol = col + off[1];
+                if (newRow < 0 || newRow > 10 || newCol < 0 || newCol > 10) continue;
+                int rhoID = getRhoCellID(row, col, newRow, newCol);
+                String rID = "RhoCell" + rhoID;
+                String nID = "OctCell" + rowColToOct(newRow, newCol);
+                if (!visited.contains(nID) && isOwnedBy(rID, playerColor) && isOwnedBy(nID, playerColor)) {
+                    visited.add(nID);
+                    queue.add(nID);
+                }
+            }
+        }
+        return visited;
     }
 
     //helper method to update display for next player
