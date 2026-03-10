@@ -694,54 +694,22 @@ public class QuaxController {
     private Polygon turnRhombus;
 
     @FXML
-    private Label ModeLabel; // Tracking H Vs H or H vs B
+    private Label titleLabel;
 
     @FXML
-    private Label gameModeSelect;
-
-    @FXML
-    private Button HVsHButton;
-
-    //@FXML
-    //private Button HVsBButton;
+    private Label winnerLabel;
 
     @FXML private Button pieRuleButton;
 
     private Player player1 ; // players of the code
     private Player player2 ;
-
-    //Updating the mode of the game
-    @FXML
-    private void onHumanVsHuman(){
-        System.out.println("CLICKED: Human vs Human");
-
-        ModeLabel.setText("Human Vs Human");
-        GameControl.setGameMode(GameControl.GameMode.HUMAN_VS_HUMAN);
-        System.out.println("mode " +  GameControl.getGameMode());
-        //disables the unclicked button so that user cant click another mode once mode is already chosen
-        HVsHButton.setDisable(false);
-        //HVsBButton.setDisable(true);
-        gameModeSelect.setOpacity(0.4);
-    }
-
-//    @FXML
-//    private void onHumanVsBot(){
-//        System.out.println("CLICKED: Human vs Bot");
-//
-//        ModeLabel.setText("Human Vs Bot");
-//        GameControl.setGameMode(GameControl.GameMode.HUMAN_VS_BOT);
-//        System.out.println("mode " +  GameControl.getGameMode());
-//        //disables the unclicked button so that user cant click another mode once mode is already chosen
-//        HVsHButton.setDisable(true);
-//        HVsBButton.setDisable(false);
-//        gameModeSelect.setOpacity(0.4);
-//    }
-
     private boolean pieRuleAvailable = true;
     private boolean isBlackTurn = true;
+    private boolean gameOver = false;
 
     @FXML
     void getCellID(MouseEvent event) {
+        if (gameOver) return;
         Polygon cell = (Polygon) event.getSource();
 
         // if cell has been clicked already
@@ -773,6 +741,14 @@ public class QuaxController {
         if (clickedID.startsWith("OctCell")) {
             List<String> chain = getConnectedChain(clickedID, currentColor);
             System.out.println("Connected chain from " + clickedID + ": " + chain);
+        }
+
+        if (isBlackConnectedTopToBottom()) {
+            gameOver = true;
+            winnerLabel.setText("BLACK wins!");
+        } else if (isWhiteConnectedLeftToRight()) {
+            gameOver = true;
+            winnerLabel.setText("WHITE wins!");
         }
 
         // switch turn
@@ -852,6 +828,46 @@ public class QuaxController {
         return visited;
     }
 
+    public boolean isBlackConnectedTopToBottom() {
+        // check every cell in the top row
+        for (int col = 0; col <= 10; col++) {
+            String startID = "OctCell" + rowColToOct(0, col);
+            // only start BFS from BLACK cells
+            if (!isOwnedBy(startID, javafx.scene.paint.Color.BLACK)) continue;
+
+            // get the full connected chain from this starting cell
+            List<String> chain = getConnectedChain(startID, javafx.scene.paint.Color.BLACK);
+
+            // check if any cell in the chain is in the bottom row
+            for (String cellID : chain) {
+                int id = Integer.parseInt(cellID.replace("OctCell", ""));
+                int[] rc = octToRowCol(id);
+                if (rc[0] == 10) return true; // reached bottom row
+            }
+        }
+        return false;
+    }
+
+    public boolean isWhiteConnectedLeftToRight() {
+        // check every cell in the left column
+        for (int row = 0; row <= 10; row++) {
+            String startID = "OctCell" + rowColToOct(row, 0);
+            // only start BFS from WHITE cells
+            if (!isOwnedBy(startID, javafx.scene.paint.Color.WHITE)) continue;
+
+            // get the full connected chain from this starting cell
+            List<String> chain = getConnectedChain(startID, javafx.scene.paint.Color.WHITE);
+
+            // check if any cell in the chain is in the right column
+            for (String cellID : chain) {
+                int id = Integer.parseInt(cellID.replace("OctCell", ""));
+                int[] rc = octToRowCol(id);
+                if (rc[1] == 10) return true; // reached right column
+            }
+        }
+        return false;
+    }
+
     //helper method to update display for next player
     private void updateTurnDisplay(){
         if (isBlackTurn) {
@@ -923,10 +939,6 @@ public class QuaxController {
         assert RhoCell6 != null : "fx:id=\"RhoCell6\" was not injected: check your FXML file 'quax-view.fxml'.";
         assert RhoCell7 != null : "fx:id=\"RhoCell7\" was not injected: check your FXML file 'quax-view.fxml'.";
         assert RhoCell8 != null : "fx:id=\"RhoCell8\" was not injected: check your FXML file 'quax-view.fxml'.";
-        assert ModeLabel != null : "fx:id=\"ModeLabel\" was not injected: check your FXML file 'quax-view.fxml'.";
-        assert gameModeSelect != null : "fx:id=\"gameModeSelect\" was not injected: check your FXML file 'quax-view.fxml'.";
-        assert HVsHButton != null : "fx:id=\"HVsHButton\" was not injected: check your FXML file 'quax-view.fxml'.";
-        //assert HVsBButton != null : "fx:id=\"HVsBButton\" was not injected: check your FXML file 'quax-view.fxml'.";
         assert pieRuleButton != null : "fx:id=\"pieRuleButton\" was not injected: check your FXML file 'quax-view.fxml'.";
         player1 = new Player(GameControl.PlayerTurn.BLACK);
         player2 = new Player(GameControl.PlayerTurn.WHITE);
