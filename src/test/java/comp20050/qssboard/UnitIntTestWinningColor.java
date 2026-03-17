@@ -3,20 +3,16 @@ package comp20050.qssboard;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-//This is unit test is to test the different ways a color can win , it also sees if the correct message is printed out to inidicate the win
+//This is unit and integration test to test the different ways a color can win , it also sees if the correct message is printed out to inidicate the win
 //        Ex: if isBlackConnectedTopToBottom() is true then the message should Black wins
 
-public class UnitTestWinningColor extends ApplicationTest{
+public class UnitIntTestWinningColor extends ApplicationTest{
 
     private QuaxController controller;
 
