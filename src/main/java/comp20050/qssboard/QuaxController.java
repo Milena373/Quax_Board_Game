@@ -1,11 +1,9 @@
-/**
- * Sample Skeleton for 'quax-view.fxml' Controller Class
- */
-
 package comp20050.qssboard;
 
-import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,12 +12,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Polygon;
 
 public class QuaxController {
-
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
-
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
 
     @FXML // fx:id="OctCell1"
     private Polygon OctCell1; // Value injected by FXMLLoader
@@ -694,89 +686,124 @@ public class QuaxController {
     private Polygon turnRhombus;
 
     @FXML
-    private Label titleLabel;
-
-    @FXML
     private Label winnerLabel;
 
     @FXML private Button pieRuleButton;
 
-    private Player player1 ; // players of the code
+    private Player player1 ;
     private Player player2 ;
+
     private boolean pieRuleAvailable = true;
     private boolean isBlackTurn = true;
     private boolean gameOver = false;
 
-    @FXML
-    void getCellID(MouseEvent event) {
-        if (gameOver) return;
-        Polygon cell = (Polygon) event.getSource();
+    private static final int BOARD_SIZE = 11;
+    private static final int LAST_INDEX = BOARD_SIZE - 1;
+    private static final int RHO_SIZE = BOARD_SIZE - 1;
 
-        // if cell has been clicked already
-        if (cell.getFill().equals(javafx.scene.paint.Color.BLACK) ||
-                cell.getFill().equals(javafx.scene.paint.Color.WHITE)) {
+    @FXML
+    void handleCellClick(MouseEvent event) {
+        if (gameOver) {
             return;
         }
-        // set color of clicked cell and capture current player colour
-        javafx.scene.paint.Color currentColor;
+
+        Polygon clickedCell = (Polygon) event.getSource();
+        if (cellIsOccupied(clickedCell)) {
+            return;
+        }
+
+        javafx.scene.paint.Color currentColor = placePiece(clickedCell);
+        updatePieRuleState(currentColor);
+        checkForWinner();
+        switchTurn();
+        updateTurnDisplay();
+    }
+
+    /**
+     * Returns true if the selected cell already contains a piece.
+     */
+    private boolean cellIsOccupied(Polygon cell) {
+        return cell.getFill().equals(javafx.scene.paint.Color.BLACK)
+                || cell.getFill().equals(javafx.scene.paint.Color.WHITE);
+    }
+
+    /**
+     * Places the current player's piece in the selected cell
+     * and returns the colour that was placed.
+     */
+    private javafx.scene.paint.Color placePiece(Polygon cell) {
         if (isBlackTurn) {
             cell.setFill(javafx.scene.paint.Color.BLACK);
-            currentColor = javafx.scene.paint.Color.BLACK;
-            //should pie Rule after the 1st turn
-            if (pieRuleAvailable) {
-                showPieButton();
-            }
-        } else {
-            cell.setFill(javafx.scene.paint.Color.WHITE);
-            cell.setStroke(javafx.scene.paint.Color.BLACK);
-            currentColor = javafx.scene.paint.Color.WHITE;
-            if (pieRuleAvailable) {
-                hidePieButton();
-                pieRuleAvailable = false;
-            }
+            return javafx.scene.paint.Color.BLACK;
         }
 
-        // detect connected chain from clicked cell
-        String clickedID = cell.getId();
-        if (clickedID.startsWith("OctCell")) {
-            List<String> chain = getConnectedChain(clickedID, currentColor);
-            System.out.println("Connected chain from " + clickedID + ": " + chain);
+        cell.setFill(javafx.scene.paint.Color.WHITE);
+        cell.setStroke(javafx.scene.paint.Color.BLACK);
+        return javafx.scene.paint.Color.WHITE;
+    }
+
+    /**
+     * Updates pie rule availability after a move is made.
+     */
+    private void updatePieRuleState(javafx.scene.paint.Color currentColor) {
+        if (!pieRuleAvailable) {
+            return;
         }
 
+        if (currentColor.equals(javafx.scene.paint.Color.BLACK)) {
+            showPieButton();
+            return;
+        }
+
+        hidePieButton();
+        pieRuleAvailable = false;
+    }
+
+    /**
+     * Checks whether either player has won and updates the winner label.
+     */
+    private void checkForWinner() {
         if (isBlackConnectedTopToBottom()) {
             gameOver = true;
             winnerLabel.setText("BLACK wins!");
-        } else if (isWhiteConnectedLeftToRight()) {
+            return;
+        }
+
+        if (isWhiteConnectedLeftToRight()) {
             gameOver = true;
             winnerLabel.setText("WHITE wins!");
         }
+    }
 
-        // switch turn
-        isBlackTurn = !isBlackTurn;
-        // update display for next player
-        updateTurnDisplay();
+    /**
+     * Switches to the other player's turn if the game is still active.
+     */
+    private void switchTurn() {
+        if (!gameOver) {
+            isBlackTurn = !isBlackTurn;
+        }
     }
 
     // converts OctCell ID to row/col (0-indexed)
     private int[] octToRowCol(int id) {
-        return new int[]{(id - 1) / 11, (id - 1) % 11};
+        return new int[]{(id - 1) / BOARD_SIZE, (id - 1) % BOARD_SIZE};
     }
 
     // converts row/col to OctCell ID
     private int rowColToOct(int row, int col) {
-        return row * 11 + col + 1;
+        return row * BOARD_SIZE + col + 1;
     }
 
     // gets the RhoCell ID between two diagonally adjacent octagons
     private int getRhoCellID(int row1, int col1, int row2, int col2) {
         int rhoRow = Math.min(row1, row2);
         int rhoCol = Math.min(col1, col2);
-        return rhoRow * 10 + rhoCol + 1;
+        return rhoRow * RHO_SIZE + rhoCol + 1;
     }
 
     // checks if a cell is owned by the given colour
-    private boolean isOwnedBy(String cellID, javafx.scene.paint.Color color) {
-        Polygon cell = (Polygon) OctCell1.getScene().lookup("#" + cellID);
+    private boolean isCellOwnedBy(String cellId, javafx.scene.paint.Color color) {
+        Polygon cell = (Polygon) OctCell1.getScene().lookup("#" + cellId);
         return cell != null && cell.getFill().equals(color);
     }
 
@@ -786,7 +813,7 @@ public class QuaxController {
 
         // only works for OctCells as start
         if (!startCellID.startsWith("OctCell")) return visited;
-        if (!isOwnedBy(startCellID, playerColor)) return visited;
+        if (!isCellOwnedBy(startCellID, playerColor)) return visited;
 
         queue.add(startCellID);
         visited.add(startCellID);
@@ -802,9 +829,9 @@ public class QuaxController {
             for (int[] off : directOffsets) {
                 int newRow = row + off[0];
                 int newCol = col + off[1];
-                if (newRow < 0 || newRow > 10 || newCol < 0 || newCol > 10) continue;
+                if (newRow < 0 || newRow > LAST_INDEX || newCol < 0 || newCol > LAST_INDEX) continue;
                 String nID = "OctCell" + rowColToOct(newRow, newCol);
-                if (!visited.contains(nID) && isOwnedBy(nID, playerColor)) {
+                if (!visited.contains(nID) && isCellOwnedBy(nID, playerColor)) {
                     visited.add(nID);
                     queue.add(nID);
                 }
@@ -819,7 +846,7 @@ public class QuaxController {
                 int rhoID = getRhoCellID(row, col, newRow, newCol);
                 String rID = "RhoCell" + rhoID;
                 String nID = "OctCell" + rowColToOct(newRow, newCol);
-                if (!visited.contains(nID) && isOwnedBy(rID, playerColor) && isOwnedBy(nID, playerColor)) {
+                if (!visited.contains(nID) && isCellOwnedBy(rID, playerColor) && isCellOwnedBy(nID, playerColor)) {
                     visited.add(nID);
                     queue.add(nID);
                 }
@@ -830,10 +857,10 @@ public class QuaxController {
 
     public boolean isBlackConnectedTopToBottom() {
         // check every cell in the top row
-        for (int col = 0; col <= 10; col++) {
+        for (int col = 0; col <= LAST_INDEX; col++) {
             String startID = "OctCell" + rowColToOct(0, col);
             // only start BFS from BLACK cells
-            if (!isOwnedBy(startID, javafx.scene.paint.Color.BLACK)) continue;
+            if (!isCellOwnedBy(startID, javafx.scene.paint.Color.BLACK)) continue;
 
             // get the full connected chain from this starting cell
             List<String> chain = getConnectedChain(startID, javafx.scene.paint.Color.BLACK);
@@ -842,7 +869,7 @@ public class QuaxController {
             for (String cellID : chain) {
                 int id = Integer.parseInt(cellID.replace("OctCell", ""));
                 int[] rc = octToRowCol(id);
-                if (rc[0] == 10) return true; // reached bottom row
+                if (rc[0] == LAST_INDEX) return true; // reached bottom row
             }
         }
         return false;
@@ -850,10 +877,10 @@ public class QuaxController {
 
     public boolean isWhiteConnectedLeftToRight() {
         // check every cell in the left column
-        for (int row = 0; row <= 10; row++) {
+        for (int row = 0; row <= LAST_INDEX; row++) {
             String startID = "OctCell" + rowColToOct(row, 0);
             // only start BFS from WHITE cells
-            if (!isOwnedBy(startID, javafx.scene.paint.Color.WHITE)) continue;
+            if (!isCellOwnedBy(startID, javafx.scene.paint.Color.WHITE)) continue;
 
             // get the full connected chain from this starting cell
             List<String> chain = getConnectedChain(startID, javafx.scene.paint.Color.WHITE);
@@ -862,13 +889,12 @@ public class QuaxController {
             for (String cellID : chain) {
                 int id = Integer.parseInt(cellID.replace("OctCell", ""));
                 int[] rc = octToRowCol(id);
-                if (rc[1] == 10) return true; // reached right column
+                if (rc[1] == LAST_INDEX) return true; // reached right column
             }
         }
         return false;
     }
 
-    //helper method to update display for next player
     private void updateTurnDisplay(){
         if (isBlackTurn) {
             turnLabel.setText("BLACK to play");
@@ -884,13 +910,11 @@ public class QuaxController {
         }
     }
 
-    //method to show the pie Rule button
     private void showPieButton(){
         pieRuleButton.setVisible(true);
         pieRuleButton.setDisable(false);
     }
 
-    //method to hide the pie Rule button
     private void hidePieButton(){
         pieRuleButton.setVisible(false);
         pieRuleButton.setDisable(true);
@@ -902,12 +926,12 @@ public class QuaxController {
         if(!pieRuleAvailable){
             return;
         }
-        //swap the colours of players
-        GameControl.PlayerTurn temp=player1.getPlayerColor();
+
+        // swap the colours of players
+        GameControl.PlayerTurn temp = player1.getPlayerColor();
         player1.setPlayerColor(player2.getPlayerColor());
         player2.setPlayerColor(temp);
 
-        //hide button after decision
         hidePieButton();
         pieRuleAvailable = false;
         updateTurnDisplay();

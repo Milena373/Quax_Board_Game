@@ -6,18 +6,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-/*
+/**
  * 21x21 matrix representation of the Quax board used to test the game logic
- * without having a GUI present
- *
- * Encoding used by integration tests:
- * 0 = octagonal cell
- * 1 = rhombic cell
- * 2 = empty / no cell
+ * without the GUI
  */
 public final class QuaxBoard {
 
     public static final int SIZE = 21;
+
+    private static final int LOGICAL_SIZE = 11;
+    private static final int LAST_INDEX = LOGICAL_SIZE - 1;
+
+    private static final int OCTAGON = 0;
+    private static final int RHOMBUS = 1;
+    private static final int EMPTY = 2;
+
+    private static final int BLACK_OCT = 3;
+    private static final int WHITE_OCT = 4;
+    private static final int BLACK_RHO = 5;
+    private static final int WHITE_RHO = 6;
 
     private final int[][] cells = new int[SIZE][SIZE];
 
@@ -32,14 +39,14 @@ public final class QuaxBoard {
      * - otherwise -> 2 (empty)
      */
     public void initialise() {
-        for (int r = 0; r < SIZE; r++) {
-            for (int c = 0; c < SIZE; c++) {
-                if ((r % 2 == 0) && (c % 2 == 0)) {
-                    cells[r][c] = 0;
-                } else if ((r % 2 == 1) && (c % 2 == 1)) {
-                    cells[r][c] = 1;
+        for (int row = 0; row < SIZE; row++) {
+            for (int col = 0; col < SIZE; col++) {
+                if ((row % 2 == 0) && (col % 2 == 0)) {
+                    cells[row][col] = OCTAGON;
+                } else if ((row % 2 == 1) && (col % 2 == 1)) {
+                    cells[row][col] = RHOMBUS;
                 } else {
-                    cells[r][c] = 2;
+                    cells[row][col] = EMPTY;
                 }
             }
         }
@@ -48,13 +55,13 @@ public final class QuaxBoard {
     // Deep copy
     public int[][] snapshot() {
         int[][] copy = new int[SIZE][SIZE];
-        for (int r = 0; r < SIZE; r++) {
-            copy[r] = Arrays.copyOf(cells[r], SIZE);
+        for (int row = 0; row < SIZE; row++) {
+            copy[row] = Arrays.copyOf(cells[row], SIZE);
         }
         return copy;
     }
 
-    public int get(int row, int col) {
+    public int getCellValue(int row, int col) {
         return cells[row][col];
     }
 
@@ -68,8 +75,8 @@ public final class QuaxBoard {
      * gives the logical 11x11 board coordinates.
      * e.g. matrix (0,0) -> logical (0,0), matrix (2,2) -> logical (1,1)
      */
-    private int[] matrixToLogical(int matRow, int matCol) {
-        return new int[]{matRow / 2, matCol / 2};
+    private int[] matrixToLogical(int matrixRow, int matrixCol) {
+        return new int[]{matrixRow / 2, matrixCol / 2};
     }
 
     /**
@@ -78,9 +85,10 @@ public final class QuaxBoard {
      * to the even/even octagon positions in the 21x21 matrix.
      * e.g. logical (0,0) -> matrix (0,0), logical (1,1) -> matrix (2,2)
      */
-    private int[] logicalToMatrix(int logRow, int logCol) {
-        return new int[]{logRow * 2, logCol * 2};
+    private int[] logicalToMatrix(int logicalRow, int logicalCol) {
+        return new int[]{logicalRow * 2, logicalCol * 2};
     }
+
 /**
  * Determines whether a connected chain of same-colour cells exists
  * starting from the given matrix position using BFS.
@@ -89,13 +97,11 @@ public final class QuaxBoard {
  * - They are horizontally or vertically adjacent, OR
  * - They are diagonally adjacent AND there is a same-colour rhombic
  *   cell bridging them at the odd/odd matrix position between them.
- *
- * Player values:
- * - 3 = BLACK octagon, 4 = WHITE octagon
- * - 5 = BLACK rhombus, 6 = WHITE rhombus
  */
     public List<int[]> getConnectedChain(int startMatRow, int startMatCol, int playerValue) {
-        if (cells[startMatRow][startMatCol] != playerValue) return new ArrayList<>();
+        if (cells[startMatRow][startMatCol] != playerValue) {
+            return new ArrayList<>();
+        }
 
         List<int[]> visited = new ArrayList<>();
         Queue<int[]> queue = new LinkedList<>();
@@ -113,7 +119,7 @@ public final class QuaxBoard {
             for (int[] off : directOffsets) {
                 int newLogRow = logRow + off[0];
                 int newLogCol = logCol + off[1];
-                if (newLogRow < 0 || newLogRow > 10 || newLogCol < 0 || newLogCol > 10) continue;
+                if (newLogRow < 0 || newLogRow > LAST_INDEX || newLogCol < 0 || newLogCol > LAST_INDEX) continue;
                 int[] newMat = logicalToMatrix(newLogRow, newLogCol);
                 if (cells[newMat[0]][newMat[1]] == playerValue && !containsCell(visited, newMat)) {
                     visited.add(newMat);
@@ -126,12 +132,12 @@ public final class QuaxBoard {
             for (int[] off : diagOffsets) {
                 int newLogRow = logRow + off[0];
                 int newLogCol = logCol + off[1];
-                if (newLogRow < 0 || newLogRow > 10 || newLogCol < 0 || newLogCol > 10) continue;
+                if (newLogRow < 0 || newLogRow > LAST_INDEX || newLogCol < 0 || newLogCol > LAST_INDEX) continue;
                 int[] newMat = logicalToMatrix(newLogRow, newLogCol);
                 // rhombus is at the odd/odd position between the two octagons
                 int rhoMatRow = current[0] + off[0];
                 int rhoMatCol = current[1] + off[1];
-                int rhombusValue = playerValue == 3 ? 5 : 6; // BLACK=5, WHITE=6
+                int rhombusValue = playerValue == BLACK_OCT ? BLACK_RHO : WHITE_RHO;
                 if (cells[rhoMatRow][rhoMatCol] == rhombusValue
                         && cells[newMat[0]][newMat[1]] == playerValue
                         && !containsCell(visited, newMat)) {
@@ -148,8 +154,10 @@ public final class QuaxBoard {
      * Used by hasConnectedChain to avoid revisiting cells during BFS.
      */
     private boolean containsCell(List<int[]> visited, int[] cell) {
-        for (int[] v : visited) {
-            if (v[0] == cell[0] && v[1] == cell[1]) return true;
+        for (int[] visitedCell : visited) {
+            if (visitedCell[0] == cell[0] && visitedCell[1] == cell[1]){
+                return true;
+            }
         }
         return false;
     }

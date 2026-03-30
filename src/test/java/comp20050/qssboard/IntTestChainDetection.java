@@ -8,15 +8,7 @@ import java.util.List;
  * Integration tests for the connected chain detection feature (Sprint 2, Feature 4).
  *
  * These tests validate the chain detection game logic without the use of a GUI.
- * The Quax board is represented as a 21x21 matrix using the following encoding:
- *
- * 0 = empty octagonal cell
- * 1 = empty rhombic cell
- * 2 = no cell
- * 3 = BLACK octagonal stone
- * 4 = WHITE octagonal stone
- * 5 = BLACK rhombic tile
- * 6 = WHITE rhombic tile
+ * The Quax board is represented as a 21x21 matrix
  *
  * Each test synthetically initialises a known board layout and verifies
  * that the chain detection logic produces the expected result.
@@ -25,6 +17,11 @@ import java.util.List;
  */
 
 public class IntTestChainDetection {
+
+    private static final int BLACK_OCT = 3;
+    private static final int WHITE_OCT = 4;
+    private static final int BLACK_RHO = 5;
+    private static final int WHITE_RHO = 6;
 
     // helper to check if a specific matrix position is in the chain
     private boolean containsCell(List<int[]> chain, int[] cell) {
@@ -37,9 +34,9 @@ public class IntTestChainDetection {
     @Test
     void test_feature4_1_horizontalChainBlack() {
         QuaxBoard board = new QuaxBoard();
-        board.setCell(0, 0, 3); // OctCell1
-        board.setCell(0, 2, 3); // OctCell2
-        board.setCell(0, 4, 3); // OctCell3
+        board.setCell(0, 0, BLACK_OCT); // OctCell1
+        board.setCell(0, 2, BLACK_OCT); // OctCell2
+        board.setCell(0, 4, BLACK_OCT); // OctCell3
 
         List<int[]> chain = board.getConnectedChain(0, 0, 3);
         assertEquals(3, chain.size());
@@ -51,9 +48,9 @@ public class IntTestChainDetection {
     @Test
     void test_feature4_2_verticalChainBlack() {
         QuaxBoard board = new QuaxBoard();
-        board.setCell(0, 0, 3); // OctCell1
-        board.setCell(2, 0, 3); // OctCell12
-        board.setCell(4, 0, 3); // OctCell23
+        board.setCell(0, 0, BLACK_OCT); // OctCell1
+        board.setCell(2, 0, BLACK_OCT); // OctCell12
+        board.setCell(4, 0, BLACK_OCT); // OctCell23
 
         List<int[]> chain = board.getConnectedChain(0, 0, 3);
         assertEquals(3, chain.size());
@@ -65,9 +62,9 @@ public class IntTestChainDetection {
     @Test
     void test_feature4_3_diagonalChainWithBridge() {
         QuaxBoard board = new QuaxBoard();
-        board.setCell(0, 0, 3); // OctCell1
-        board.setCell(1, 1, 5); // RhoCell1 - BLACK bridge
-        board.setCell(2, 2, 3); // OctCell13
+        board.setCell(0, 0, BLACK_OCT); // OctCell1
+        board.setCell(1, 1, BLACK_RHO); // RhoCell1 - BLACK bridge
+        board.setCell(2, 2, BLACK_OCT); // OctCell13
 
         List<int[]> chain = board.getConnectedChain(0, 0, 3);
         assertEquals(2, chain.size());
@@ -78,8 +75,8 @@ public class IntTestChainDetection {
     @Test
     void test_feature4_4_diagonalChainWithoutBridge() {
         QuaxBoard board = new QuaxBoard();
-        board.setCell(0, 0, 3); // OctCell1
-        board.setCell(2, 2, 3); // OctCell13 - no bridge
+        board.setCell(0, 0, BLACK_OCT); // OctCell1
+        board.setCell(2, 2, BLACK_OCT); // OctCell13 - no bridge
 
         List<int[]> chain = board.getConnectedChain(0, 0, 3);
         assertEquals(1, chain.size());
@@ -90,9 +87,9 @@ public class IntTestChainDetection {
     @Test
     void test_feature4_5_horizontalChainWhite() {
         QuaxBoard board = new QuaxBoard();
-        board.setCell(0, 0, 4); // OctCell1 - WHITE
-        board.setCell(0, 2, 4); // OctCell2 - WHITE
-        board.setCell(0, 4, 4); // OctCell3 - WHITE
+        board.setCell(0, 0, WHITE_OCT); // OctCell1 - WHITE
+        board.setCell(0, 2, WHITE_OCT); // OctCell2 - WHITE
+        board.setCell(0, 4, WHITE_OCT); // OctCell3 - WHITE
 
         List<int[]> chain = board.getConnectedChain(0, 0, 4);
         assertEquals(3, chain.size());
@@ -104,8 +101,8 @@ public class IntTestChainDetection {
     @Test
     void test_feature4_6_separateChainsNotConnected() {
         QuaxBoard board = new QuaxBoard();
-        board.setCell(0, 0, 3); // OctCell1
-        board.setCell(0, 4, 3); // OctCell3 - gap at OctCell2
+        board.setCell(0, 0, BLACK_OCT); // OctCell1
+        board.setCell(0, 4, BLACK_OCT); // OctCell3 - gap at OctCell2
 
         List<int[]> chain = board.getConnectedChain(0, 0, 3);
         assertEquals(1, chain.size());
@@ -116,11 +113,11 @@ public class IntTestChainDetection {
     @Test
     void test_feature4_7_mixedChainBlack() {
         QuaxBoard board = new QuaxBoard();
-        board.setCell(0, 0, 3); // OctCell1
-        board.setCell(0, 2, 3); // OctCell2
-        board.setCell(1, 1, 5); // RhoCell1 - BLACK bridge
-        board.setCell(2, 2, 3); // OctCell13
-        board.setCell(2, 4, 3); // OctCell14
+        board.setCell(0, 0, BLACK_OCT); // OctCell1
+        board.setCell(0, 2, BLACK_OCT); // OctCell2
+        board.setCell(1, 1, BLACK_RHO); // RhoCell1 - BLACK bridge
+        board.setCell(2, 2, BLACK_OCT); // OctCell13
+        board.setCell(2, 4, BLACK_OCT); // OctCell14
 
         List<int[]> chain = board.getConnectedChain(0, 0, 3);
         assertEquals(4, chain.size());
@@ -133,9 +130,9 @@ public class IntTestChainDetection {
     @Test
     void test_feature4_8_diagonalChainWhiteWithBridge() {
         QuaxBoard board = new QuaxBoard();
-        board.setCell(0, 0, 4); // OctCell1 - WHITE
-        board.setCell(1, 1, 6); // RhoCell1 - WHITE bridge
-        board.setCell(2, 2, 4); // OctCell13 - WHITE
+        board.setCell(0, 0, WHITE_OCT); // OctCell1 - WHITE
+        board.setCell(1, 1, WHITE_RHO); // RhoCell1 - WHITE bridge
+        board.setCell(2, 2, WHITE_OCT); // OctCell13 - WHITE
 
         List<int[]> chain = board.getConnectedChain(0, 0, 4);
         assertEquals(2, chain.size());

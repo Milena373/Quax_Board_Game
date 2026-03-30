@@ -10,14 +10,18 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class IntTestQuaxBoard {
 
+    private static final int OCTAGON = 0;
+    private static final int RHOMBUS = 1;
+    private static final int EMPTY = 2;
+
     @Test
     void initialBoard_is21x21() {
         QuaxBoard board = new QuaxBoard();
-        int[][] snap = board.snapshot();
+        int[][] snapshot = board.snapshot();
 
-        assertEquals(QuaxBoard.SIZE, snap.length, "Board must have 21 rows");
-        for (int r = 0; r < QuaxBoard.SIZE; r++) {
-            assertEquals(QuaxBoard.SIZE, snap[r].length, "Row " + r + " must have 21 columns");
+        assertEquals(QuaxBoard.SIZE, snapshot.length, "Board must have 21 rows");
+        for (int row = 0; row < QuaxBoard.SIZE; row++) {
+            assertEquals(QuaxBoard.SIZE, snapshot[row].length, "Row " + row + " must have 21 columns");
         }
     }
 
@@ -26,11 +30,11 @@ public class IntTestQuaxBoard {
         QuaxBoard board = new QuaxBoard();
         int[][] snap = board.snapshot();
 
-        for (int r = 0; r < QuaxBoard.SIZE; r++) {
-            for (int c = 0; c < QuaxBoard.SIZE; c++) {
-                int v = snap[r][c];
-                assertTrue(v == 0 || v == 1 || v == 2,
-                        "Invalid code at (" + r + "," + c + "): " + v + " (expected 0,1,2)");
+        for (int row = 0; row < QuaxBoard.SIZE; row++) {
+            for (int col = 0; col < QuaxBoard.SIZE; col++) {
+                int v = snap[row][col];
+                assertTrue(v == OCTAGON || v == RHOMBUS || v == EMPTY,
+                        "Invalid code at (" + row + "," + col + "): " + v + " (expected 0,1,2)");
             }
         }
     }
@@ -50,25 +54,25 @@ public class IntTestQuaxBoard {
     }
 
     private static int[][] expectedInitialBoard() {
-        int[][] e = new int[QuaxBoard.SIZE][QuaxBoard.SIZE];
-        for (int r = 0; r < QuaxBoard.SIZE; r++) {
-            for (int c = 0; c < QuaxBoard.SIZE; c++) {
-                if ((r % 2 == 0) && (c % 2 == 0)) {
-                    e[r][c] = 0; // octagon
-                } else if ((r % 2 == 1) && (c % 2 == 1)) {
-                    e[r][c] = 1; // rhombus
+        int[][] expectedBoard = new int[QuaxBoard.SIZE][QuaxBoard.SIZE];
+        for (int row = 0; row < QuaxBoard.SIZE; row++) {
+            for (int col = 0; col < QuaxBoard.SIZE; col++) {
+                if ((row % 2 == 0) && (col % 2 == 0)) {
+                    expectedBoard[row][col] = OCTAGON;
+                } else if ((row % 2 == 1) && (col % 2 == 1)) {
+                    expectedBoard[row][col] = RHOMBUS;
                 } else {
-                    e[r][c] = 2; // empty
+                    expectedBoard[row][col] = EMPTY;
                 }
             }
         }
-        return e;
+        return expectedBoard;
     }
 
     private static void assertBoardsEqual(int[][] expected, int[][] actual) {
         assertEquals(QuaxBoard.SIZE, actual.length, "Unexpected row count");
-        for (int r = 0; r < QuaxBoard.SIZE; r++) {
-            assertArrayEquals(expected[r], actual[r], "Mismatch on row " + r);
+        for (int row = 0; row < QuaxBoard.SIZE; row++) {
+            assertArrayEquals(expected[row], actual[row], "Mismatch on row " + row);
         }
     }
 }
