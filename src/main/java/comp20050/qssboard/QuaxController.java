@@ -385,6 +385,7 @@ public class QuaxController {
         }
     }
 
+
     private void showPieButton(){
         pieRuleButton.setVisible(true);
         pieRuleButton.setDisable(false);
