@@ -7,73 +7,78 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1340.0" prefWidth="1870.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.QuaxController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1340.0" prefWidth="1870.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.QuaxController">
    <children>
-
-       <Group layoutX="300.0">
+       <Group fx:id="boardContainer" layoutX="300.0">
       <children>
          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="1033.0" layoutX="1220.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="62.0" />
          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="1033.0" layoutX="240.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="62.0" />
          <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="1125.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
          <Rectangle arcHeight="5.0" arcWidth="5.0" height="54.0" layoutX="240.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="1036.0" />
-         <GridPane layoutX="265.0" layoutY="100.0" prefWidth="989.0" alignment="CENTER">
+         <GridPane alignment="CENTER" layoutX="265.0" layoutY="100.0" prefWidth="989.0">
             <columnConstraints>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
             </columnConstraints>
 
             <children>
-               <Label text="A" GridPane.columnIndex="0" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="B" GridPane.columnIndex="1" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="C" GridPane.columnIndex="2" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="D" GridPane.columnIndex="3" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="E" GridPane.columnIndex="4" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="F" GridPane.columnIndex="5" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="G" GridPane.columnIndex="6" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="H" GridPane.columnIndex="7" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="I" GridPane.columnIndex="8" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="J" GridPane.columnIndex="9" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="K" GridPane.columnIndex="10" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
+               <Label text="A" GridPane.columnIndex="0" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="B" GridPane.columnIndex="1" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="C" GridPane.columnIndex="2" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="D" GridPane.columnIndex="3" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="E" GridPane.columnIndex="4" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="F" GridPane.columnIndex="5" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="G" GridPane.columnIndex="6" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="H" GridPane.columnIndex="7" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="I" GridPane.columnIndex="8" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="J" GridPane.columnIndex="9" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="K" GridPane.columnIndex="10" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
             </children>
+               <rowConstraints>
+                  <RowConstraints />
+               </rowConstraints>
          </GridPane>
 
-         <GridPane layoutX="265.0" layoutY="1190.0" prefWidth="989.0" alignment="CENTER">
+         <GridPane alignment="CENTER" layoutX="265.0" layoutY="1190.0" prefWidth="989.0">
             <columnConstraints>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
-               <ColumnConstraints percentWidth="9.0909090909"/>
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
+               <ColumnConstraints percentWidth="9.0909090909" />
             </columnConstraints>
 
             <children>
-               <Label text="A" GridPane.columnIndex="0" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="B" GridPane.columnIndex="1" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="C" GridPane.columnIndex="2" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="D" GridPane.columnIndex="3" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="E" GridPane.columnIndex="4" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="F" GridPane.columnIndex="5" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="G" GridPane.columnIndex="6" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="H" GridPane.columnIndex="7" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="I" GridPane.columnIndex="8" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="J" GridPane.columnIndex="9" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="K" GridPane.columnIndex="10" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
+               <Label text="A" GridPane.columnIndex="0" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="B" GridPane.columnIndex="1" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="C" GridPane.columnIndex="2" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="D" GridPane.columnIndex="3" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="E" GridPane.columnIndex="4" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="F" GridPane.columnIndex="5" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="G" GridPane.columnIndex="6" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="H" GridPane.columnIndex="7" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="I" GridPane.columnIndex="8" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="J" GridPane.columnIndex="9" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
+               <Label text="K" GridPane.columnIndex="10" GridPane.halignment="CENTER"><font><Font size="30.0" /></font></Label>
             </children>
+               <rowConstraints>
+                  <RowConstraints />
+               </rowConstraints>
          </GridPane>
 
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="1033.0" layoutX="1270.0" layoutY="146.0" stroke="BLACK" strokeType="INSIDE" width="62.0" />
@@ -81,62 +86,68 @@
 
          <GridPane layoutX="203.0" layoutY="170.0" prefHeight="990.0">
             <rowConstraints>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
             </rowConstraints>
 
             <children>
-               <Label text="11" GridPane.rowIndex="0" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="10" GridPane.rowIndex="1" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="9" GridPane.rowIndex="2" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="8" GridPane.rowIndex="3" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="7" GridPane.rowIndex="4" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="6" GridPane.rowIndex="5" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="5" GridPane.rowIndex="6" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="4" GridPane.rowIndex="7" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="3" GridPane.rowIndex="8" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="2" GridPane.rowIndex="9" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="1" GridPane.rowIndex="10" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
+               <Label text="11" GridPane.halignment="CENTER" GridPane.rowIndex="0"><font><Font size="30.0" /></font></Label>
+               <Label text="10" GridPane.halignment="CENTER" GridPane.rowIndex="1"><font><Font size="30.0" /></font></Label>
+               <Label text="9" GridPane.halignment="CENTER" GridPane.rowIndex="2"><font><Font size="30.0" /></font></Label>
+               <Label text="8" GridPane.halignment="CENTER" GridPane.rowIndex="3"><font><Font size="30.0" /></font></Label>
+               <Label text="7" GridPane.halignment="CENTER" GridPane.rowIndex="4"><font><Font size="30.0" /></font></Label>
+               <Label text="6" GridPane.halignment="CENTER" GridPane.rowIndex="5"><font><Font size="30.0" /></font></Label>
+               <Label text="5" GridPane.halignment="CENTER" GridPane.rowIndex="6"><font><Font size="30.0" /></font></Label>
+               <Label text="4" GridPane.halignment="CENTER" GridPane.rowIndex="7"><font><Font size="30.0" /></font></Label>
+               <Label text="3" GridPane.halignment="CENTER" GridPane.rowIndex="8"><font><Font size="30.0" /></font></Label>
+               <Label text="2" GridPane.halignment="CENTER" GridPane.rowIndex="9"><font><Font size="30.0" /></font></Label>
+               <Label text="1" GridPane.halignment="CENTER" GridPane.rowIndex="10"><font><Font size="30.0" /></font></Label>
             </children>
+               <columnConstraints>
+                  <ColumnConstraints />
+               </columnConstraints>
          </GridPane>
 
          <GridPane layoutX="1283.0" layoutY="170.0" prefHeight="990.0">
             <rowConstraints>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
-               <RowConstraints percentHeight="0909090909"/>
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
+               <RowConstraints percentHeight="0909090909" />
             </rowConstraints>
 
             <children>
-               <Label text="11" GridPane.rowIndex="0" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="10" GridPane.rowIndex="1" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="9"  GridPane.rowIndex="2" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="8"  GridPane.rowIndex="3" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="7"  GridPane.rowIndex="4" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="6"  GridPane.rowIndex="5" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="5"  GridPane.rowIndex="6" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="4"  GridPane.rowIndex="7" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="3"  GridPane.rowIndex="8" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="2"  GridPane.rowIndex="9" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
-               <Label text="1"  GridPane.rowIndex="10" GridPane.halignment="CENTER"><font><Font size="30.0"/></font></Label>
+               <Label text="11" GridPane.halignment="CENTER" GridPane.rowIndex="0"><font><Font size="30.0" /></font></Label>
+               <Label text="10" GridPane.halignment="CENTER" GridPane.rowIndex="1"><font><Font size="30.0" /></font></Label>
+               <Label text="9" GridPane.halignment="CENTER" GridPane.rowIndex="2"><font><Font size="30.0" /></font></Label>
+               <Label text="8" GridPane.halignment="CENTER" GridPane.rowIndex="3"><font><Font size="30.0" /></font></Label>
+               <Label text="7" GridPane.halignment="CENTER" GridPane.rowIndex="4"><font><Font size="30.0" /></font></Label>
+               <Label text="6" GridPane.halignment="CENTER" GridPane.rowIndex="5"><font><Font size="30.0" /></font></Label>
+               <Label text="5" GridPane.halignment="CENTER" GridPane.rowIndex="6"><font><Font size="30.0" /></font></Label>
+               <Label text="4" GridPane.halignment="CENTER" GridPane.rowIndex="7"><font><Font size="30.0" /></font></Label>
+               <Label text="3" GridPane.halignment="CENTER" GridPane.rowIndex="8"><font><Font size="30.0" /></font></Label>
+               <Label text="2" GridPane.halignment="CENTER" GridPane.rowIndex="9"><font><Font size="30.0" /></font></Label>
+               <Label text="1" GridPane.halignment="CENTER" GridPane.rowIndex="10"><font><Font size="30.0" /></font></Label>
             </children>
+               <columnConstraints>
+                  <ColumnConstraints />
+               </columnConstraints>
          </GridPane>
 
 
@@ -3803,10 +3814,10 @@
          </points>
       </Polygon>
 
-       <Button fx:id="pieRuleButton" visible="false" layoutX="225.0" layoutY="300.0" onAction="#onPieRule" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ; -fx-background-color: #F9A8D4; -fx-border-color: black; -fx-border-width: 2" text="Activate Pie Rule"  />
+       <Button fx:id="pieRuleButton" layoutX="225.0" layoutY="300.0" onAction="#onPieRule" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ; -fx-background-color: #F9A8D4; -fx-border-color: black; -fx-border-width: 2" text="Activate Pie Rule" visible="false" />
 
-      <Label fx:id="winnerLabel" layoutX="140" layoutY="580" text="" style="-fx-font-size: 50px; -fx-font-weight: bold;"/>
-      <Label fx:id="titleLabel" layoutX="927" layoutY="29" text="Human vs Human" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-underline: true"/>
+      <Label fx:id="winnerLabel" layoutX="140" layoutY="580" style="-fx-font-size: 50px; -fx-font-weight: bold;" text="" />
+      <Label fx:id="titleLabel" layoutX="960.0" layoutY="29.0" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-underline: true" text="Human vs Bot" />
 
    </children>
 </AnchorPane>
