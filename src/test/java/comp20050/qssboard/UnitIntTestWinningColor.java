@@ -9,9 +9,9 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Integration tests for win detection and winner display.
- */
+//This is unit and integration test to test the different ways a color can win , it also sees if the correct message is printed out to inidicate the win
+//        Ex: if isBlackConnectedTopToBottom() is true then the message should Black wins
+
 public class UnitIntTestWinningColor extends ApplicationTest{
 
     private QuaxController controller;
@@ -19,22 +19,18 @@ public class UnitIntTestWinningColor extends ApplicationTest{
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(QuaxApplication.class.getResource("quax-view.fxml"));
-        Parent board = fxmlLoader.load();
+        Parent root = fxmlLoader.load();
         controller = fxmlLoader.getController();
-
-        double scale = 0.6;
-        board.setScaleX(scale);
-        board.setScaleY(scale);
-
-        javafx.scene.Group fixedWrapper = new javafx.scene.Group(board);
-
-        javafx.scene.layout.StackPane root = new javafx.scene.layout.StackPane(fixedWrapper);
-
-        Scene scene = new Scene(root, 1000, 700);
+        root.setScaleX(0.8);
+        root.setScaleY(0.8);
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-        stage.toFront();
     }
+
+    //Test for black win
+
+    // A straight vertical win
 
     @Test
     void test_blackVerticalStraightWin(){
@@ -68,7 +64,10 @@ public class UnitIntTestWinningColor extends ApplicationTest{
 
     }
 
+    //A straight diagonal win , since conors touch both the blck and white edges ,
+    // the test shows that sprint 3 features handles the edge cases and , gives the correct verdict of who wins
     @Test
+
     void test_blackDiagonalStraightWin(){
 
         clickOn("#OctCell111"); // BLACK
@@ -121,6 +120,7 @@ public class UnitIntTestWinningColor extends ApplicationTest{
     }
 
     // In this test case , we look at getting winning chain that takes complex path , vertical,horizontal,and diagonal connection.
+
     @Test
     void test_blackMixWin(){
 
@@ -250,6 +250,10 @@ public class UnitIntTestWinningColor extends ApplicationTest{
         assertEquals("BLACK wins!", winner.getText());
     }
 
+
+    //white test
+    // A straight horizontal win
+
     @Test
 
     void test_whiteHorizontalStraightWin(){
@@ -293,6 +297,9 @@ public class UnitIntTestWinningColor extends ApplicationTest{
         assertEquals("WHITE wins!", winner.getText());
 
     }
+
+    //A straight diagonal win , since conors touch both the black and white edges ,
+    // the test shows that sprint 3 features handles the edge cases and , gives the correct verdict of who wins
 
     @Test
     void test_whiteDiagonalStraightWin(){
@@ -366,7 +373,6 @@ public class UnitIntTestWinningColor extends ApplicationTest{
         assertEquals("WHITE wins!", winner.getText());
 
     }
-
     // In this test case , we look at getting winning chain that takes complex path , vertical,horizontal,and diagonal connection.
     @Test
     void test_whiteMixWin(){
@@ -422,7 +428,6 @@ public class UnitIntTestWinningColor extends ApplicationTest{
         assertEquals("WHITE wins!", winner.getText());
 
     }
-
     // In this test case , we see that many connected chains can be developed but only one will produce a win
     @Test
     void test_white_2ConnectedChainOneWin(){
