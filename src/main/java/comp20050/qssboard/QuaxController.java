@@ -18,6 +18,8 @@ public class QuaxController {
     @FXML private Label winnerLabel;
     @FXML private Button pieRuleButton;
     @FXML private Group boardContainer;
+    @FXML private Button showStrategyButton;
+    @FXML private Button hideStrategyButton;
 
     private final Map<String, Polygon> cellMap = new HashMap<>();
     private final List<Polygon> allCells = new ArrayList<>();
@@ -34,6 +36,8 @@ public class QuaxController {
     private static final int BOARD_SIZE = 11;
     private static final int LAST_INDEX = BOARD_SIZE - 1;
     private static final int RHO_SIZE = BOARD_SIZE - 1;
+
+
 
     @FXML
     private void botMove() {
@@ -277,6 +281,25 @@ public class QuaxController {
     }
 
     @FXML
+    private void onShowStrategyButton(){
+        showStrategyButton.setVisible(false);
+
+        //call to a function that shows trategy : STILL DEVELOPEMENT
+
+        hideStrategyButton.setVisible(true);
+    }
+
+    @FXML
+    private void onHideStrategyButton(){
+
+        hideStrategyButton.setVisible(false);
+
+        //call to a function that will remove strategy illustration : STILL DEVELOPMENT
+
+        showStrategyButton.setVisible(true);
+
+    }
+    @FXML
     private void onPieRule(){
         if(!pieRuleAvailable){
             return;
@@ -314,6 +337,8 @@ public class QuaxController {
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert pieRuleButton != null : "fx:id=\"pieRuleButton\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert showStrategyButton != null : "fx:id=\"showStrategyButton\" was not injected: check your FXML file 'quax-view.fxml'.";
+        assert hideStrategyButton != null : "fx:id=\"hideStrategyButton\" was not injected: check your FXML file 'quax-view.fxml'.";
 
         player1 = new Player(GameControl.PlayerTurn.BLACK);
         player2 = new Player(GameControl.PlayerTurn.WHITE);

@@ -3818,6 +3818,8 @@
 
       <Label fx:id="winnerLabel" layoutX="140" layoutY="580" style="-fx-font-size: 50px; -fx-font-weight: bold;" text="" />
       <Label fx:id="titleLabel" layoutX="960.0" layoutY="29.0" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-underline: true" text="Human vs Bot" />
+      <Button fx:id="showStrategyButton" layoutX="1300.0" layoutY="1250.0" onAction="#onShowStrategyButton" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ; -fx-background-color:#ADD8E6 ; -fx-border-color: black; -fx-border-width: 2" text="Show Strategy" visible="true" />
+      <Button fx:id="hideStrategyButton" layoutX="1550.0" layoutY="1250.0" onAction="#onHideStrategyButton" prefHeight="50.0" prefWidth="200.0" style="-fx-font-size: 20px ; -fx-background-color:#9BC4D8 ; -fx-border-color: black; -fx-border-width: 2" text="Hide Strategy" visible="false" />
 
    </children>
 </AnchorPane>
