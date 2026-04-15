@@ -9,14 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a29d95b7-8e8e-4a12-b571-51df794a133b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/comp20050/qssboard/QuaxBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/comp20050/qssboard/QuaxBoard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/resources/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/resources/comp20050/qssboard/quax-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/resources/comp20050/qssboard/quax-view.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/test/java/comp20050/qssboard/IntTestGameMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/test/java/comp20050/qssboard/IntTestGameMode.java" afterDir="false" />
-    </list>
+    <list default="true" id="a29d95b7-8e8e-4a12-b571-51df794a133b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,6 +96,7 @@
       <workItem from="1771502505591" duration="3211000" />
       <workItem from="1771927285537" duration="607000" />
       <workItem from="1772742382555" duration="7000" />
+      <workItem from="1774957006225" duration="13000" />
     </task>
     <servers />
   </component>
