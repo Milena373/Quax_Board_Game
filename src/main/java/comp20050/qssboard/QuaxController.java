@@ -1,14 +1,24 @@
 package comp20050.qssboard;
 
-import java.util.*;
-
 import javafx.fxml.FXML;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Polygon;
 import javafx.scene.paint.Color;
-import javafx.scene.Group;
+import javafx.scene.shape.Polygon;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class QuaxController {
 
@@ -24,150 +34,215 @@ public class QuaxController {
     private final Map<String, Polygon> cellMap = new HashMap<>();
     private final List<Polygon> allCells = new ArrayList<>();
 
-    private BotPlayer bot = new BotPlayer();
-    private Player player1 ;
-    private Player player2 ;
+    private final BotPlayer bot = new BotPlayer();
+    private Player player1;
+    private Player player2;
+    private ShowStrategy showStrategy;
 
     private boolean pieRuleAvailable = true;
     private boolean isBlackTurn = true;
     private boolean gameOver = false;
     private boolean botIsBlack = true;
 
+    private long boardVersion = 0;
+    private long cachedStrategyVersion = -1;
+    private Color cachedStrategyColour = null;
+    private BotPlayer.StrategyAnalysis cachedStrategy = null;
+
     public static final int BOARD_SIZE = 11;
     private static final int LAST_INDEX = BOARD_SIZE - 1;
     private static final int RHO_SIZE = BOARD_SIZE - 1;
 
-    public static final int GRID_SIZE = 21;             // total length of the matrix
-    public static final int MAX_COORD = GRID_SIZE - 1;  // index 20 (max index)
+    public static final int GRID_SIZE = 21;
+    public static final int MAX_COORD = GRID_SIZE - 1;
     public static final int MAX_DISTANCE = 10000;
-
 
     @FXML
     private void botMove() {
-        if (gameOver) return;
-
-        // Determine bot colour
-        Color botColour;
-        if (botIsBlack) {
-            botColour = Color.BLACK;
-        } else {
-            botColour = Color.WHITE;
+        if (gameOver) {
+            return;
         }
 
-        // Get best move
-        Polygon move = bot.chooseMove(allCells, botColour, this);
+        Color botColour = getBotColour();
+        BotPlayer.StrategyAnalysis analysis = getStrategyAnalysisForCurrentBoard();
+        Polygon move = analysis == null ? null : analysis.getSelectedMove();
+        if (move == null) {
+            return;
+        }
 
-        if (move != null) {
-            move.setFill(botColour);
-            move.setStroke(Color.BLACK);
+        applyColour(move, botColour);
+        registerBoardChange();
+        showStrategy.setAnalysis(analysis);
 
-            updatePieRuleState(botColour);
-            checkForWinner();
-            isBlackTurn = !isBlackTurn;
-            updateTurnDisplay();
+        updatePieRuleState(botColour);
+        checkForWinner();
+        switchTurn();
+        updateTurnDisplay();
+    }
+
+    private boolean isBotTurn() {
+        return !gameOver && isBlackTurn == botIsBlack;
+    }
+
+    private void requestBotTurn() {
+        if (isBotTurn()) {
+            botMove();
         }
     }
 
-    // Data structure for Dijkstra pq
-    // It stores a matrix position and the cost to reach it
     private static class PathNode implements Comparable<PathNode> {
-        int r, c, cost;
-        PathNode(int r, int c, int cost) {
-            this.r = r;
-            this.c = c;
+        int row;
+        int col;
+        int cost;
+
+        PathNode(int row, int col, int cost) {
+            this.row = row;
+            this.col = col;
             this.cost = cost;
         }
+
         @Override
         public int compareTo(PathNode other) {
-            return Integer.compare(this.cost, other.cost);
+            int costComparison = Integer.compare(this.cost, other.cost);
+            if (costComparison != 0) {
+                return costComparison;
+            }
+
+            int rowComparison = Integer.compare(this.row, other.row);
+            if (rowComparison != 0) {
+                return rowComparison;
+            }
+
+            return Integer.compare(this.col, other.col);
         }
     }
 
-    // Helper to get matrix coordinates from cell ID
+    static final class PathSearchResult {
+        final int[][] dist;
+        final int[][] prevRow;
+        final int[][] prevCol;
+
+        PathSearchResult(int size) {
+            this.dist = new int[size][size];
+            this.prevRow = new int[size][size];
+            this.prevCol = new int[size][size];
+
+            for (int row = 0; row < size; row++) {
+                Arrays.fill(dist[row], MAX_DISTANCE);
+                Arrays.fill(prevRow[row], -1);
+                Arrays.fill(prevCol[row], -1);
+            }
+        }
+    }
+
     public int[] getCoordinateFromId(String id) {
-        // Get number from ID
-        int num = Integer.parseInt(id.replaceAll("\\D", "")) - 1;
+        int number = Integer.parseInt(id.replaceAll("\\D", "")) - 1;
 
         if (id.startsWith("OctCell")) {
-            // 11x11 octagon grid layout
-            return new int[]{(num / BOARD_SIZE) * 2, (num % BOARD_SIZE) * 2};
-        } else {
-            // 10x10 rhombus grid layout
-            return new int[]{((num / RHO_SIZE) * 2) + 1, ((num % RHO_SIZE) * 2) + 1};
+            return new int[]{(number / BOARD_SIZE) * 2, (number % BOARD_SIZE) * 2};
         }
+
+        return new int[]{((number / RHO_SIZE) * 2) + 1, ((number % RHO_SIZE) * 2) + 1};
     }
 
-    // Calculates a distance grid using Dijkstra's algorithm
-    // returns an array where dist[r][c] is the min moves needed to reach that tile
     public int[][] runDijkstra(Color colour, boolean fromStart) {
-        int[][] dist = new int[QuaxBoard.SIZE][QuaxBoard.SIZE];
-        for (int[] row : dist) Arrays.fill(row, MAX_DISTANCE);
+        return runDijkstraSearch(colour, fromStart).dist;
+    }
 
-        PriorityQueue<PathNode> pq = new PriorityQueue<>();
+    PathSearchResult runDijkstraSearch(Color colour, boolean fromStart) {
+        PathSearchResult result = new PathSearchResult(QuaxBoard.SIZE);
+        PriorityQueue<PathNode> queue = new PriorityQueue<>();
         boolean isBlack = (colour == Color.BLACK);
         Color humanColour = isBlack ? Color.WHITE : Color.BLACK;
 
-        // Starting logic
-        // 0 cost for owned tiles, 1 cost for empty tiles (one move needed)
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            int r, c;
+        for (int index = 0; index < BOARD_SIZE; index++) {
+            int row;
+            int col;
             if (isBlack) {
-                r = fromStart ? 0 : MAX_COORD;
-                c = i * 2;
+                row = fromStart ? 0 : MAX_COORD;
+                col = index * 2;
             } else {
-                r = i * 2;
-                c = fromStart ? 0 : MAX_COORD;
+                row = index * 2;
+                col = fromStart ? 0 : MAX_COORD;
             }
 
-            Polygon p = cellMap.get("OctCell" + rowColToOct(r / 2, c / 2));
+            String cellId = getCellIdFromCoordinate(row, col);
+            Polygon polygon = cellMap.get(cellId);
+            if (polygon == null || isCellOwnedBy(cellId, humanColour)) {
+                continue;
+            }
 
-            if (isCellOwnedBy(p.getId(), humanColour)) continue;
-
-            int initialTileCost = isCellOwnedBy(p.getId(), colour) ? 0 : 1;
-            dist[r][c] = initialTileCost;
-            pq.add(new PathNode(r, c, initialTileCost));
+            int tileCost = isCellOwnedBy(cellId, colour) ? 0 : 1;
+            result.dist[row][col] = tileCost;
+            queue.add(new PathNode(row, col, tileCost));
         }
 
-        // Search across the rest of the board
-        while (!pq.isEmpty()) {
-            PathNode curr = pq.poll();
+        while (!queue.isEmpty()) {
+            PathNode current = queue.poll();
+            if (current.cost > result.dist[current.row][current.col]) {
+                continue;
+            }
 
-            // Skip node if there's already shorter path to get here
-            if (curr.cost > dist[curr.r][curr.c]) continue;
+            for (int[] neighbour : getNeighbourCoordinates(current.row, current.col)) {
+                int nextRow = neighbour[0];
+                int nextCol = neighbour[1];
+                String nextId = getCellIdFromCoordinate(nextRow, nextCol);
 
-            // Determine available neighbours based on current tile type
-            boolean isOctagon = (curr.r % 2 == 0 && curr.c % 2 == 0);
-            int[][] neighbours = isOctagon ?
-                    new int[][]{{-2,0},{2,0},{0,-2},{0,2},{-1,-1},{-1,1},{1,-1},{1,1}} :
-                    new int[][]{{-1,-1},{-1,1},{1,-1},{1,1}};
+                if (isCellOwnedBy(nextId, humanColour)) {
+                    continue;
+                }
 
-            for (int[] n : neighbours) {
-                int nr = curr.r + n[0];
-                int nc = curr.c + n[1];
-
-                // Stay within board size
-                if (nr < 0 || nr > MAX_COORD || nc < 0 || nc > MAX_COORD) continue;
-
-                String id = (nr % 2 == 0 && nc % 2 == 0) ?
-                        "OctCell" + rowColToOct(nr/2, nc/2) :
-                        "RhoCell" + getRhoCellID(nr/2, nc/2, (nr/2), (nc/2));
-
-                if (isCellOwnedBy(id, humanColour)) continue;
-
-                // Calculate cost
-                int tileCost = isCellOwnedBy(id, colour) ? 0 : 1;
-
-                // Check if moving to neighbour through current tile is better than previously found paths
-                if (dist[curr.r][curr.c] + tileCost < dist[nr][nc]) {
-                    // Update neighbour's shortest distance with lower cost
-                    dist[nr][nc] = dist[curr.r][curr.c] + tileCost;
-
-                    // Add neighbour to pq to check its own neighbours next
-                    pq.add(new PathNode(nr, nc, dist[nr][nc]));
+                int tileCost = isCellOwnedBy(nextId, colour) ? 0 : 1;
+                int newDistance = result.dist[current.row][current.col] + tileCost;
+                if (newDistance < result.dist[nextRow][nextCol]) {
+                    result.dist[nextRow][nextCol] = newDistance;
+                    result.prevRow[nextRow][nextCol] = current.row;
+                    result.prevCol[nextRow][nextCol] = current.col;
+                    queue.add(new PathNode(nextRow, nextCol, newDistance));
                 }
             }
         }
-        return dist;
+
+        return result;
+    }
+
+    List<String> buildPathFromSearches(
+            String cellId,
+            PathSearchResult forwardSearch,
+            PathSearchResult backwardSearch
+    ) {
+        int[] coordinate = getCoordinateFromId(cellId);
+        int row = coordinate[0];
+        int col = coordinate[1];
+
+        if (forwardSearch.dist[row][col] >= MAX_DISTANCE || backwardSearch.dist[row][col] >= MAX_DISTANCE) {
+            return Collections.emptyList();
+        }
+
+        List<String> startToCell = new ArrayList<>();
+        int currentRow = row;
+        int currentCol = col;
+        while (currentRow != -1 && currentCol != -1) {
+            startToCell.add(getCellIdFromCoordinate(currentRow, currentCol));
+            int previousRow = forwardSearch.prevRow[currentRow][currentCol];
+            int previousCol = forwardSearch.prevCol[currentRow][currentCol];
+            currentRow = previousRow;
+            currentCol = previousCol;
+        }
+        Collections.reverse(startToCell);
+
+        List<String> fullPath = new ArrayList<>(startToCell);
+        currentRow = backwardSearch.prevRow[row][col];
+        currentCol = backwardSearch.prevCol[row][col];
+        while (currentRow != -1 && currentCol != -1) {
+            fullPath.add(getCellIdFromCoordinate(currentRow, currentCol));
+            int previousRow = backwardSearch.prevRow[currentRow][currentCol];
+            int previousCol = backwardSearch.prevCol[currentRow][currentCol];
+            currentRow = previousRow;
+            currentCol = previousCol;
+        }
+
+        return fullPath;
     }
 
     @FXML
@@ -181,52 +256,41 @@ public class QuaxController {
             return;
         }
 
-        //System.out.println("Player turn: " + clickedCell.getId());
+        showStrategy.clearAnalysis();
+        Color currentColour = placePiece(clickedCell);
+        registerBoardChange();
 
-        javafx.scene.paint.Color currentColor = placePiece(clickedCell);
-        updatePieRuleState(currentColor);
+        updatePieRuleState(currentColour);
         checkForWinner();
         switchTurn();
         updateTurnDisplay();
 
-        if (!gameOver && isBlackTurn == botIsBlack) {
-            botMove();
-            checkForWinner();
+        if (!gameOver && isBotTurn()) {
+            requestBotTurn();
         }
     }
 
-    /**
-     * Returns true if the selected cell already contains a piece.
-     */
     public boolean cellIsOccupied(Polygon cell) {
-        return cell.getFill().equals(javafx.scene.paint.Color.BLACK)
-                || cell.getFill().equals(javafx.scene.paint.Color.WHITE);
+        return cell.getFill().equals(Color.BLACK) || cell.getFill().equals(Color.WHITE);
     }
 
-    /**
-     * Places the current player's piece in the selected cell
-     * and returns the colour that was placed.
-     */
-    private javafx.scene.paint.Color placePiece(Polygon cell) {
-        if (isBlackTurn) {
-            cell.setFill(javafx.scene.paint.Color.BLACK);
-            return javafx.scene.paint.Color.BLACK;
-        }
-
-        cell.setFill(javafx.scene.paint.Color.WHITE);
-        cell.setStroke(javafx.scene.paint.Color.BLACK);
-        return javafx.scene.paint.Color.WHITE;
+    private Color placePiece(Polygon cell) {
+        Color pieceColour = isBlackTurn ? Color.BLACK : Color.WHITE;
+        applyColour(cell, pieceColour);
+        return pieceColour;
     }
 
-    /**
-     * Updates pie rule availability after a move is made.
-     */
-    private void updatePieRuleState(javafx.scene.paint.Color currentColor) {
+    private void applyColour(Polygon cell, Color colour) {
+        cell.setFill(colour);
+        cell.setStroke(Color.BLACK);
+    }
+
+    private void updatePieRuleState(Color currentColour) {
         if (!pieRuleAvailable) {
             return;
         }
 
-        if (currentColor.equals(javafx.scene.paint.Color.BLACK)) {
+        if (currentColour.equals(Color.BLACK)) {
             showPieButton();
             return;
         }
@@ -235,9 +299,6 @@ public class QuaxController {
         pieRuleAvailable = false;
     }
 
-    /**
-     * Checks whether either player has won and updates the winner label.
-     */
     private void checkForWinner() {
         if (isBlackConnectedTopToBottom()) {
             gameOver = true;
@@ -251,44 +312,38 @@ public class QuaxController {
         }
     }
 
-    /**
-     * Switches to the other player's turn if the game is still active.
-     */
     private void switchTurn() {
         if (!gameOver) {
             isBlackTurn = !isBlackTurn;
         }
     }
 
-    // converts OctCell ID to row/col (0-indexed)
     private int[] octToRowCol(int id) {
         return new int[]{(id - 1) / BOARD_SIZE, (id - 1) % BOARD_SIZE};
     }
 
-    // converts row/col to OctCell ID
     private int rowColToOct(int row, int col) {
         return row * BOARD_SIZE + col + 1;
     }
 
-    // gets the RhoCell ID between two diagonally adjacent octagons
     private int getRhoCellID(int row1, int col1, int row2, int col2) {
         int rhoRow = Math.min(row1, row2);
         int rhoCol = Math.min(col1, col2);
         return rhoRow * RHO_SIZE + rhoCol + 1;
     }
 
-    private boolean isCellOwnedBy(String cellId, javafx.scene.paint.Color color) {
+    private boolean isCellOwnedBy(String cellId, Color color) {
         Polygon cell = cellMap.get(cellId);
         return cell != null && cell.getFill().equals(color);
     }
 
-    public List<String> getConnectedChain(String startCellID, javafx.scene.paint.Color playerColor) {
+    public List<String> getConnectedChain(String startCellID, Color playerColor) {
         List<String> visited = new ArrayList<>();
         Queue<String> queue = new LinkedList<>();
 
-        // only works for OctCells as start
-        if (!startCellID.startsWith("OctCell")) return visited;
-        if (!isCellOwnedBy(startCellID, playerColor)) return visited;
+        if (!startCellID.startsWith("OctCell") || !isCellOwnedBy(startCellID, playerColor)) {
+            return visited;
+        }
 
         queue.add(startCellID);
         visited.add(startCellID);
@@ -296,152 +351,146 @@ public class QuaxController {
         while (!queue.isEmpty()) {
             String current = queue.poll();
             int id = Integer.parseInt(current.replace("OctCell", ""));
-            int[] rc = octToRowCol(id);
-            int row = rc[0], col = rc[1];
+            int[] rowCol = octToRowCol(id);
+            int row = rowCol[0];
+            int col = rowCol[1];
 
-            // horizontal/vertical neighbours
             int[][] directOffsets = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-            for (int[] off : directOffsets) {
-                int newRow = row + off[0];
-                int newCol = col + off[1];
-                if (newRow < 0 || newRow > LAST_INDEX || newCol < 0 || newCol > LAST_INDEX) continue;
-                String nID = "OctCell" + rowColToOct(newRow, newCol);
-                if (!visited.contains(nID) && isCellOwnedBy(nID, playerColor)) {
-                    visited.add(nID);
-                    queue.add(nID);
+            for (int[] offset : directOffsets) {
+                int nextRow = row + offset[0];
+                int nextCol = col + offset[1];
+                if (nextRow < 0 || nextRow > LAST_INDEX || nextCol < 0 || nextCol > LAST_INDEX) {
+                    continue;
+                }
+
+                String nextId = "OctCell" + rowColToOct(nextRow, nextCol);
+                if (!visited.contains(nextId) && isCellOwnedBy(nextId, playerColor)) {
+                    visited.add(nextId);
+                    queue.add(nextId);
                 }
             }
 
-            // diagonal neighbours - only if same colour RhoCell bridge exists
-            int[][] diagOffsets = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
-            for (int[] off : diagOffsets) {
-                int newRow = row + off[0];
-                int newCol = col + off[1];
-                if (newRow < 0 || newRow > 10 || newCol < 0 || newCol > 10) continue;
-                int rhoID = getRhoCellID(row, col, newRow, newCol);
-                String rID = "RhoCell" + rhoID;
-                String nID = "OctCell" + rowColToOct(newRow, newCol);
-                if (!visited.contains(nID) && isCellOwnedBy(rID, playerColor) && isCellOwnedBy(nID, playerColor)) {
-                    visited.add(nID);
-                    queue.add(nID);
+            int[][] diagonalOffsets = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+            for (int[] offset : diagonalOffsets) {
+                int nextRow = row + offset[0];
+                int nextCol = col + offset[1];
+                if (nextRow < 0 || nextRow > LAST_INDEX || nextCol < 0 || nextCol > LAST_INDEX) {
+                    continue;
+                }
+
+                int rhoId = getRhoCellID(row, col, nextRow, nextCol);
+                String rhombusId = "RhoCell" + rhoId;
+                String nextId = "OctCell" + rowColToOct(nextRow, nextCol);
+                if (!visited.contains(nextId)
+                        && isCellOwnedBy(rhombusId, playerColor)
+                        && isCellOwnedBy(nextId, playerColor)) {
+                    visited.add(nextId);
+                    queue.add(nextId);
                 }
             }
         }
+
         return visited;
     }
 
     public boolean isBlackConnectedTopToBottom() {
-        // check every cell in the top row
         for (int col = 0; col <= LAST_INDEX; col++) {
-            String startID = "OctCell" + rowColToOct(0, col);
-            // only start BFS from BLACK cells
-            if (!isCellOwnedBy(startID, javafx.scene.paint.Color.BLACK)) continue;
+            String startId = "OctCell" + rowColToOct(0, col);
+            if (!isCellOwnedBy(startId, Color.BLACK)) {
+                continue;
+            }
 
-            // get the full connected chain from this starting cell
-            List<String> chain = getConnectedChain(startID, javafx.scene.paint.Color.BLACK);
-
-            // check if any cell in the chain is in the bottom row
-            for (String cellID : chain) {
-                int id = Integer.parseInt(cellID.replace("OctCell", ""));
-                int[] rc = octToRowCol(id);
-                if (rc[0] == LAST_INDEX) return true; // reached bottom row
+            List<String> chain = getConnectedChain(startId, Color.BLACK);
+            for (String cellId : chain) {
+                int id = Integer.parseInt(cellId.replace("OctCell", ""));
+                int[] rowCol = octToRowCol(id);
+                if (rowCol[0] == LAST_INDEX) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
     public boolean isWhiteConnectedLeftToRight() {
-        // check every cell in the left column
         for (int row = 0; row <= LAST_INDEX; row++) {
-            String startID = "OctCell" + rowColToOct(row, 0);
-            // only start BFS from WHITE cells
-            if (!isCellOwnedBy(startID, javafx.scene.paint.Color.WHITE)) continue;
+            String startId = "OctCell" + rowColToOct(row, 0);
+            if (!isCellOwnedBy(startId, Color.WHITE)) {
+                continue;
+            }
 
-            // get the full connected chain from this starting cell
-            List<String> chain = getConnectedChain(startID, javafx.scene.paint.Color.WHITE);
-
-            // check if any cell in the chain is in the right column
-            for (String cellID : chain) {
-                int id = Integer.parseInt(cellID.replace("OctCell", ""));
-                int[] rc = octToRowCol(id);
-                if (rc[1] == LAST_INDEX) return true; // reached right column
+            List<String> chain = getConnectedChain(startId, Color.WHITE);
+            for (String cellId : chain) {
+                int id = Integer.parseInt(cellId.replace("OctCell", ""));
+                int[] rowCol = octToRowCol(id);
+                if (rowCol[1] == LAST_INDEX) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    private void updateTurnDisplay(){
+    private void updateTurnDisplay() {
         if (isBlackTurn) {
             turnLabel.setText("BLACK to play");
-            turnOctagon.setFill(javafx.scene.paint.Color.BLACK);
-            turnRhombus.setFill(javafx.scene.paint.Color.BLACK);
-
+            turnOctagon.setFill(Color.BLACK);
+            turnRhombus.setFill(Color.BLACK);
         } else {
             turnLabel.setText("WHITE to play");
-            turnOctagon.setFill(javafx.scene.paint.Color.WHITE);
-            turnOctagon.setStroke(javafx.scene.paint.Color.BLACK);
-            turnRhombus.setFill(javafx.scene.paint.Color.WHITE);
-            turnRhombus.setStroke(javafx.scene.paint.Color.BLACK);
+            turnOctagon.setFill(Color.WHITE);
+            turnOctagon.setStroke(Color.BLACK);
+            turnRhombus.setFill(Color.WHITE);
+            turnRhombus.setStroke(Color.BLACK);
         }
     }
 
-
-    private void showPieButton(){
+    private void showPieButton() {
         pieRuleButton.setVisible(true);
         pieRuleButton.setDisable(false);
     }
 
-    private void hidePieButton(){
+    private void hidePieButton() {
         pieRuleButton.setVisible(false);
         pieRuleButton.setDisable(true);
     }
 
     @FXML
-    private void onShowStrategyButton(){
-        showStrategyButton.setVisible(false);
-
-        //call to a function that shows strategy : STILL DEVELOPMENT
-
-        hideStrategyButton.setVisible(true);
+    private void onShowStrategyButton() {
+        showStrategy.show();
     }
 
     @FXML
-    private void onHideStrategyButton(){
-
-        hideStrategyButton.setVisible(false);
-
-        //call to a function that will remove strategy illustration : STILL DEVELOPMENT
-
-        showStrategyButton.setVisible(true);
-
+    private void onHideStrategyButton() {
+        showStrategy.hide();
     }
+
     @FXML
-    private void onPieRule(){
-        if(!pieRuleAvailable){
+    private void onPieRule() {
+        if (!pieRuleAvailable) {
             return;
         }
 
-        // swap the colours of players
         GameControl.PlayerTurn temp = player1.getPlayerColor();
         player1.setPlayerColor(player2.getPlayerColor());
         player2.setPlayerColor(temp);
 
         botIsBlack = !botIsBlack;
+        invalidateStrategyCache();
+        showStrategy.clearAnalysis();
 
         hidePieButton();
         pieRuleAvailable = false;
 
-        if (!gameOver && isBlackTurn == botIsBlack) {
-            botMove();
-        }
-
         updateTurnDisplay();
 
+        if (isBotTurn()) {
+            requestBotTurn();
+        }
     }
 
     private void populateAllCells() {
-        // look through every object inside the boardContainer
-        for (javafx.scene.Node node : boardContainer.getChildren()) {
+        for (Node node : boardContainer.getChildren()) {
             if (node instanceof Polygon polygon) {
                 String id = polygon.getId();
                 if (id != null && (id.startsWith("OctCell") || id.startsWith("RhoCell"))) {
@@ -452,7 +501,7 @@ public class QuaxController {
         }
     }
 
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    @FXML
     void initialize() {
         assert pieRuleButton != null : "fx:id=\"pieRuleButton\" was not injected: check your FXML file 'quax-view.fxml'.";
         assert showStrategyButton != null : "fx:id=\"showStrategyButton\" was not injected: check your FXML file 'quax-view.fxml'.";
@@ -466,17 +515,67 @@ public class QuaxController {
         pieRuleAvailable = true;
 
         populateAllCells();
+        showStrategy = new ShowStrategy(boardContainer, cellMap, showStrategyButton, hideStrategyButton);
 
         if (allCells.isEmpty()) {
             System.err.println("ERROR: no cells were injected");
         }
 
-        javafx.application.Platform.runLater(() -> {
-            if (botIsBlack && isBlackTurn) {
-                botMove();
-            }
-        });
-
         updateTurnDisplay();
+        javafx.application.Platform.runLater(this::requestBotTurn);
+    }
+
+    private Color getBotColour() {
+        return botIsBlack ? Color.BLACK : Color.WHITE;
+    }
+
+    private void registerBoardChange() {
+        boardVersion++;
+        invalidateStrategyCache();
+    }
+
+    private void invalidateStrategyCache() {
+        cachedStrategy = null;
+        cachedStrategyVersion = -1;
+        cachedStrategyColour = null;
+    }
+
+    private BotPlayer.StrategyAnalysis getStrategyAnalysisForCurrentBoard() {
+        Color botColour = getBotColour();
+        if (cachedStrategy != null
+                && cachedStrategyVersion == boardVersion
+                && Objects.equals(cachedStrategyColour, botColour)) {
+            return cachedStrategy;
+        }
+
+        cachedStrategy = bot.analyseMove(allCells, botColour, this);
+        cachedStrategyVersion = boardVersion;
+        cachedStrategyColour = botColour;
+        return cachedStrategy;
+    }
+
+    private List<int[]> getNeighbourCoordinates(int row, int col) {
+        List<int[]> neighbours = new ArrayList<>();
+        int[][] offsets = (row % 2 == 0 && col % 2 == 0)
+                ? new int[][]{{-2, 0}, {0, -2}, {0, 2}, {2, 0}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}}
+                : new int[][]{{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+
+        for (int[] offset : offsets) {
+            int nextRow = row + offset[0];
+            int nextCol = col + offset[1];
+            if (nextRow < 0 || nextRow > MAX_COORD || nextCol < 0 || nextCol > MAX_COORD) {
+                continue;
+            }
+            neighbours.add(new int[]{nextRow, nextCol});
+        }
+        return neighbours;
+    }
+
+    String getCellIdFromCoordinate(int row, int col) {
+        if (row % 2 == 0 && col % 2 == 0) {
+            return "OctCell" + rowColToOct(row / 2, col / 2);
+        }
+
+        return "RhoCell" + (((row / 2) * RHO_SIZE) + (col / 2) + 1);
     }
 }
