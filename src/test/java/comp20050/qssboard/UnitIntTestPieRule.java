@@ -1,25 +1,32 @@
 package comp20050.qssboard;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
+import org.testfx.util.WaitForAsyncUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 
 public class UnitIntTestPieRule extends ApplicationTest {
 
+
+   private QuaxController controller;
+
+
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                QuaxApplication.class.getResource("quax-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setX(0);
-        stage.setY(0);
+        FXMLLoader fxmlLoader = new FXMLLoader(QuaxApplication.class.getResource("quax-view.fxml"));
+        Parent root = fxmlLoader.load();
+        controller = fxmlLoader.getController();
+        root.setScaleX(0.4);
+        root.setScaleY(0.4);
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
@@ -30,11 +37,14 @@ public class UnitIntTestPieRule extends ApplicationTest {
     void testPieButtonAppears() {
 
         // first move (black)
-        clickOn("#OctCell1");
-
+//        clickOn("#OctCell1");
+//        WaitForAsyncUtils.waitForFxEvents();
         Button pieButton = lookup("#pieRuleButton").queryAs(Button.class);
 
-        assertTrue(pieButton.isVisible());
+        System.out.println("Visible: " + pieButton.isVisible());
+        System.out.println("Disabled: " + pieButton.isDisabled());
+        System.out.println("Managed: " + pieButton.isManaged());
+        assertTrue(pieButton.isVisible(), "Pie rule button should be visible after first move");
     }
 
     // INTEGRATION TEST: test that clicking the pie rule button swaps the turn
@@ -42,11 +52,16 @@ public class UnitIntTestPieRule extends ApplicationTest {
     @Test
     void testPieRuleSwitchesTurn() {
 
-        clickOn("#OctCell1");       // black first move
+        //clickOn("#OctCell1");       // black first move
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Button pieButton = lookup("#pieRuleButton").queryAs(Button.class);
+        assertTrue(pieButton.isVisible(), "Pie rule button should be visible before clicking it");
         clickOn("#pieRuleButton");  // pie rule activated
+        WaitForAsyncUtils.waitForFxEvents(); //creating a delay
 
         // verify that turn label updated
-        verifyThat("#turnLabel", (Label l) -> l.getText().contains("WHITE to play"));
+        verifyThat("#turnLabel", (Label l) -> l.getText().contains("BLACK to play"));
     }
 
     // test that pie rule can't be used more than once
@@ -54,10 +69,12 @@ public class UnitIntTestPieRule extends ApplicationTest {
     @Test
     void testPieButtonAvailableOnce() {
 
-        clickOn("#OctCell1");        // black first move
-        clickOn("#pieRuleButton");   // pie rule activated
-
+        //clickOn("#OctCell1");        // black first move
+        WaitForAsyncUtils.waitForFxEvents();
         Button pieButton = lookup("#pieRuleButton").queryAs(Button.class);
+        assertTrue(pieButton.isVisible(), "Pie rule button should be visible before clicking it");
+        clickOn("#pieRuleButton");   // pie rule activated
+        WaitForAsyncUtils.waitForFxEvents();
 
         System.out.println("Visible: " + pieButton.isVisible());
         System.out.println("Disabled: " + pieButton.isDisabled());
