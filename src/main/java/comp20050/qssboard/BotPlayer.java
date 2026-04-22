@@ -11,12 +11,12 @@ public class BotPlayer {
         Color humanColour = (botColour == Color.BLACK) ? Color.WHITE : Color.BLACK;
 
         // Run Dijkstra for both players from both sides
-        // Fwd: distance from start edge to tile
-        // Bwd: distance from tile to goal edge
-        int[][] botFwd = controller.runDijkstra(botColour, true);
-        int[][] botBwd = controller.runDijkstra(botColour, false);
-        int[][] humanFwd = controller.runDijkstra(humanColour, true);
-        int[][] humanBwd = controller.runDijkstra(humanColour, false);
+        // Forward: distance from start edge to tile
+        // Backward: distance from tile to goal edge
+        int[][] botForward = controller.runDijkstra(botColour, true);
+        int[][] botBackword = controller.runDijkstra(botColour, false);
+        int[][] humanForward = controller.runDijkstra(humanColour, true);
+        int[][] humanBackward = controller.runDijkstra(humanColour, false);
 
         // Calculate overall shortest path for each player
         int botMovesToWin = INF;
@@ -26,12 +26,12 @@ public class BotPlayer {
             // Bot's goal edge
             int br = (botColour == Color.BLACK) ? controller.MAX_COORD : i * 2;
             int bc = (botColour == Color.BLACK) ? i * 2 : controller.MAX_COORD;
-            botMovesToWin = Math.min(botMovesToWin, botFwd[br][bc]);
+            botMovesToWin = Math.min(botMovesToWin, botForward[br][bc]);
 
             // Human's goal edge
             int hr = (humanColour == Color.BLACK) ? 20 : i * 2;
             int hc = (humanColour == Color.BLACK) ? i * 2 : 20;
-            humanMovesToWin = Math.min(humanMovesToWin, humanFwd[hr][hc]);
+            humanMovesToWin = Math.min(humanMovesToWin, humanForward[hr][hc]);
         }
 
         // Print shortest path
@@ -54,10 +54,10 @@ public class BotPlayer {
             int c = coords[1];
 
             // Costs for specific tiles
-            int bf = botFwd[r][c];   // Bot distance from start to here
-            int bb = botBwd[r][c];   // Bot distance from here to goal
-            int hf = humanFwd[r][c]; // Human distance from start to here
-            int hb = humanBwd[r][c]; // Human distance from here to goal
+            int bf = botForward[r][c];      // Bot distance from start to here
+            int bb = botBackword[r][c];     // Bot distance from here to goal
+            int hf = humanForward[r][c];    // Human distance from start to here
+            int hb = humanBackward[r][c];   // Human distance from here to goal
 
             // Tile is useful if it's on a valid path between edges
             boolean botUseful = (bf < INF && bb < INF);
@@ -69,7 +69,7 @@ public class BotPlayer {
             long score;
 
             // Calculate how many moves are needed to complete a path through this tile
-            // Lower scores are better, this prioritizes blocking when human is close to winning
+            // Lower scores are better, this prioritises blocking when human is close to winning
             if (botUseful && humanUseful) {
                 int botPathCost = bf + bb - 1;
                 int humanPathCost = hf + hb - 1;
