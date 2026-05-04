@@ -5,7 +5,6 @@ import javafx.scene.shape.Polygon;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -13,7 +12,6 @@ public class BotPlayer {
     private static final int INF = QuaxController.MAX_DISTANCE;
 
     private final Random random = new Random();
-
 
     public static final class CellEvaluation {
         private final Polygon cell;
@@ -307,37 +305,7 @@ public class BotPlayer {
             ));
         }
 
-        evaluations.sort(Comparator
-                .comparingLong(CellEvaluation::getScore)
-                .thenComparing(evaluation -> evaluation.getCell().getId()));
-
-        Polygon selectedMove = bestMoves.get(random.nextInt(bestMoves.size()));
-        CellEvaluation selectedEvaluation = null;
-        for (CellEvaluation evaluation : evaluations) {
-            if (evaluation.getCell().getId().equals(selectedMove.getId())) {
-                selectedEvaluation = evaluation;
-                break;
-            }
-        }
-
-        List<String> botPath = Collections.emptyList();
-        List<String> humanPath = Collections.emptyList();
-        if (selectedEvaluation != null) {
-            if (selectedEvaluation.isBotUseful()) {
-                botPath = controller.buildPathFromSearches(
-                        selectedMove.getId(),
-                        botForwardSearch,
-                        botBackwardSearch
-                );
-            }
-            if (selectedEvaluation.isHumanUseful()) {
-                humanPath = controller.buildPathFromSearches(
-                        selectedMove.getId(),
-                        humanForwardSearch,
-                        humanBackwardSearch
-                );
-            }
-        }
+        Polygon selectedMove = bestMoves.get(new Random().nextInt(bestMoves.size()));
 
         return new StrategyAnalysis(
                 botColour,
@@ -346,17 +314,17 @@ public class BotPlayer {
                 humanMovesToWin,
                 evaluations,
                 selectedMove,
-                botPath,
-                humanPath,
+                Collections.emptyList(),
+                Collections.emptyList(),
                 false
         );
     }
 
     private int findShortestWinDistance(Color colour, int[][] dist, QuaxController controller) {
         int bestDistance = INF;
-        for (int i = 0; i < QuaxController.BOARD_SIZE; i++) {
-            int row = (colour == Color.BLACK) ? QuaxController.MAX_COORD : i * 2;
-            int col = (colour == Color.BLACK) ? i * 2 : QuaxController.MAX_COORD;
+        for (int i = 0; i < controller.BOARD_SIZE; i++) {
+            int row = (colour == Color.BLACK) ? controller.MAX_COORD : i * 2;
+            int col = (colour == Color.BLACK) ? i * 2 : controller.MAX_COORD;
             bestDistance = Math.min(bestDistance, dist[row][col]);
         }
         return bestDistance;

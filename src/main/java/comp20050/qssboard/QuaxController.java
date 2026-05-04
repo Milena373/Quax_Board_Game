@@ -141,12 +141,7 @@ public class QuaxController {
         if (id.startsWith("OctCell")) {
             return new int[]{(number / BOARD_SIZE) * 2, (number % BOARD_SIZE) * 2};
         }
-
         return new int[]{((number / RHO_SIZE) * 2) + 1, ((number % RHO_SIZE) * 2) + 1};
-    }
-
-    public int[][] runDijkstra(Color colour, boolean fromStart) {
-        return runDijkstraSearch(colour, fromStart).dist;
     }
 
     PathSearchResult runDijkstraSearch(Color colour, boolean fromStart) {
@@ -202,47 +197,7 @@ public class QuaxController {
                 }
             }
         }
-
         return result;
-    }
-
-    List<String> buildPathFromSearches(
-            String cellId,
-            PathSearchResult forwardSearch,
-            PathSearchResult backwardSearch
-    ) {
-        int[] coordinate = getCoordinateFromId(cellId);
-        int row = coordinate[0];
-        int col = coordinate[1];
-
-        if (forwardSearch.dist[row][col] >= MAX_DISTANCE || backwardSearch.dist[row][col] >= MAX_DISTANCE) {
-            return Collections.emptyList();
-        }
-
-        List<String> startToCell = new ArrayList<>();
-        int currentRow = row;
-        int currentCol = col;
-        while (currentRow != -1 && currentCol != -1) {
-            startToCell.add(getCellIdFromCoordinate(currentRow, currentCol));
-            int previousRow = forwardSearch.prevRow[currentRow][currentCol];
-            int previousCol = forwardSearch.prevCol[currentRow][currentCol];
-            currentRow = previousRow;
-            currentCol = previousCol;
-        }
-        Collections.reverse(startToCell);
-
-        List<String> fullPath = new ArrayList<>(startToCell);
-        currentRow = backwardSearch.prevRow[row][col];
-        currentCol = backwardSearch.prevCol[row][col];
-        while (currentRow != -1 && currentCol != -1) {
-            fullPath.add(getCellIdFromCoordinate(currentRow, currentCol));
-            int previousRow = backwardSearch.prevRow[currentRow][currentCol];
-            int previousCol = backwardSearch.prevCol[currentRow][currentCol];
-            currentRow = previousRow;
-            currentCol = previousCol;
-        }
-
-        return fullPath;
     }
 
     @FXML
