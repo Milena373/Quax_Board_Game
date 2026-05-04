@@ -11,8 +11,6 @@ import java.util.Random;
 public class BotPlayer {
     private static final int INF = QuaxController.MAX_DISTANCE;
 
-    private final Random random = new Random();
-
     public static final class CellEvaluation {
         private final Polygon cell;
         private final int botForward;
@@ -199,125 +197,113 @@ public class BotPlayer {
     public StrategyAnalysis analyseMove(List<Polygon> cells, Color botColour, QuaxController controller) {
         Color humanColour = (botColour == Color.BLACK) ? Color.WHITE : Color.BLACK;
 
+        // Run Dijkstra's algorithm from both sides for both players to find connected paths
         QuaxController.PathSearchResult botForwardSearch = controller.runDijkstraSearch(botColour, true);
         QuaxController.PathSearchResult botBackwardSearch = controller.runDijkstraSearch(botColour, false);
         QuaxController.PathSearchResult humanForwardSearch = controller.runDijkstraSearch(humanColour, true);
         QuaxController.PathSearchResult humanBackwardSearch = controller.runDijkstraSearch(humanColour, false);
 
-        int[][] botForward = botForwardSearch.dist;
-        int[][] botBackward = botBackwardSearch.dist;
-        int[][] humanForward = humanForwardSearch.dist;
-        int[][] humanBackward = humanBackwardSearch.dist;
-
-        int botMovesToWin = findShortestWinDistance(botColour, botForward, controller);
-        int humanMovesToWin = findShortestWinDistance(humanColour, humanForward, controller);
+        int botMovesToWin = findShortestWinDistance(botColour, botForwardSearch.dist, controller);
+        int humanMovesToWin = findShortestWinDistance(humanColour, humanForwardSearch.dist, controller);
 
         List<CandidateScore> candidates = new ArrayList<>();
+        long bestScore = calculateScores(cells, candidates, botForwardSearch, botBackwardSearch,
+                humanForwardSearch, humanBackwardSearch, botMovesToWin, humanMovesToWin, controller);
+
+        return chooseMoveFromCandidates(candidates, bestScore, botColour, humanColour,
+                botMovesToWin, humanMovesToWin, cells, controller);
+    }
+
+    private long calculateScores(List<Polygon> cells, List<CandidateScore> candidates,
+                                   QuaxController.PathSearchResult botForwardSearch,
+                                   QuaxController.PathSearchResult botBackwardSearch,
+                                   QuaxController.PathSearchResult humanForwardSearch,
+                                   QuaxController.PathSearchResult humanBackwardSearch,
+                                   int botMovesToWin, int humanMovesToWin, QuaxController controller) {
         long bestScore = Long.MAX_VALUE;
 
         for (Polygon cell : cells) {
-            if (controller.cellIsOccupied(cell)) {
-                continue;
-            }
+            if (controller.cellIsOccupied(cell)) { continue; }
 
             int[] coordinates = controller.getCoordinateFromId(cell.getId());
             int row = coordinates[0];
             int col = coordinates[1];
 
-            int botForwardCost = botForward[row][col];
-            int botBackwardCost = botBackward[row][col];
-            int humanForwardCost = humanForward[row][col];
-            int humanBackwardCost = humanBackward[row][col];
+            CandidateScore scoreResult = evaluateCell(cell, row, col, botForwardSearch, botBackwardSearch,
+                    humanForwardSearch, humanBackwardSearch, botMovesToWin, humanMovesToWin);
 
-            boolean botUseful = botForwardCost < INF && botBackwardCost < INF;
-            boolean humanUseful = humanForwardCost < INF && humanBackwardCost < INF;
-            if (!botUseful && !humanUseful) {
-                continue;
+            if (scoreResult != null) {
+                candidates.add(scoreResult);
+                bestScore = Math.min(bestScore, scoreResult.score);
             }
+        }
+        return bestScore;
+    }
 
-            long score;
-            if (botUseful && humanUseful) {
-                int botPathCost = botForwardCost + botBackwardCost - 1;
-                int humanPathCost = humanForwardCost + humanBackwardCost - 1;
-                score = (long) humanMovesToWin * humanPathCost
-                        + (long) botMovesToWin * botPathCost;
-            } else if (botUseful) {
-                score = (long) botMovesToWin * (botForwardCost + botBackwardCost - 1);
-            } else {
-                score = (long) humanMovesToWin * (humanForwardCost + humanBackwardCost - 1);
-            }
+    private CandidateScore evaluateCell(Polygon cell, int row, int col,
+                                        QuaxController.PathSearchResult botForwardSearch,
+                                        QuaxController.PathSearchResult botBackwardSearch,
+                                        QuaxController.PathSearchResult humanForwardSearch,
+                                        QuaxController.PathSearchResult humanBackwardSearch,
+                                        int botMovesToWin, int humanMovesToWin) {
+        int botForwardCost = botForwardSearch.dist[row][col];
+        int botBackwardCost = botBackwardSearch.dist[row][col];
+        int humanForwardCost = humanForwardSearch.dist[row][col];
+        int humanBackwardCost = humanBackwardSearch.dist[row][col];
 
-            candidates.add(new CandidateScore(
-                    cell,
-                    botForwardCost,
-                    botBackwardCost,
-                    humanForwardCost,
-                    humanBackwardCost,
-                    botUseful,
-                    humanUseful,
-                    score
-            ));
-            bestScore = Math.min(bestScore, score);
+        boolean botUseful = botForwardCost < INF && botBackwardCost < INF;
+        boolean humanUseful = humanForwardCost < INF && humanBackwardCost < INF;
+
+        if (!botUseful && !humanUseful) { return null; }
+
+        long score;
+        if (botUseful && humanUseful) {
+            // -1 to adjust the current tile being counted in distance calculations
+            int botPathCost = botForwardCost + botBackwardCost - 1;
+            int humanPathCost = humanForwardCost + humanBackwardCost - 1;
+
+            // Weigh move value by how close each player is to winning
+            score = (long) humanMovesToWin * humanPathCost + (long) botMovesToWin * botPathCost;
+        } else if (botUseful) {
+            score = (long) botMovesToWin * (botForwardCost + botBackwardCost - 1);
+        } else {
+            score = (long) humanMovesToWin * (humanForwardCost + humanBackwardCost - 1);
         }
 
-        if (candidates.isEmpty()) {
-            List<Polygon> fallbackMoves = new ArrayList<>();
-            for (Polygon cell : cells) {
-                if (!controller.cellIsOccupied(cell)) {
-                    fallbackMoves.add(cell);
-                }
-            }
+        return new CandidateScore(cell, botForwardCost, botBackwardCost, humanForwardCost, humanBackwardCost,
+                botUseful, humanUseful, score);
+    }
 
-            Polygon selectedMove = fallbackMoves.isEmpty()
-                    ? null
-                    : fallbackMoves.get(random.nextInt(fallbackMoves.size()));
-
-            return new StrategyAnalysis(
-                    botColour,
-                    humanColour,
-                    botMovesToWin,
-                    humanMovesToWin,
-                    Collections.emptyList(),
-                    selectedMove,
-                    Collections.emptyList(),
-                    Collections.emptyList(),
-                    true
-            );
-        }
-
+    private StrategyAnalysis chooseMoveFromCandidates(List<CandidateScore> candidates, long bestScore,
+                                                      Color botColour, Color humanColour, int botMovesToWin,
+                                                      int humanMovesToWin, List<Polygon> cells, QuaxController controller) {
         List<Polygon> bestMoves = new ArrayList<>();
         List<CellEvaluation> evaluations = new ArrayList<>();
+        boolean isFallback = candidates.isEmpty();
 
-        for (CandidateScore candidate : candidates) {
-            if (candidate.score == bestScore) {
-                bestMoves.add(candidate.cell);
+        if (isFallback) {
+            // If no strategic moves exist, pick any empty tile
+            for (Polygon cell : cells) {
+                if (!controller.cellIsOccupied(cell)) {
+                    bestMoves.add(cell);
+                }
             }
+        } else {
+            for (CandidateScore candidate : candidates) {
+                if (candidate.score == bestScore) {
+                    bestMoves.add(candidate.cell);
+                }
 
-            evaluations.add(new CellEvaluation(
-                    candidate.cell,
-                    candidate.botForward,
-                    candidate.botBackward,
-                    candidate.humanForward,
-                    candidate.humanBackward,
-                    candidate.botUseful,
-                    candidate.humanUseful,
-                    candidate.score
-            ));
+                evaluations.add(new CellEvaluation(candidate.cell,
+                        candidate.botForward, candidate.botBackward, candidate.humanForward, candidate.humanBackward,
+                        candidate.botUseful, candidate.humanUseful, candidate.score));
+            }
         }
+        // Pick randomly from best moves to avoid predictability
+        Polygon chosenMove = bestMoves.get(new Random().nextInt(bestMoves.size()));
 
-        Polygon selectedMove = bestMoves.get(new Random().nextInt(bestMoves.size()));
-
-        return new StrategyAnalysis(
-                botColour,
-                humanColour,
-                botMovesToWin,
-                humanMovesToWin,
-                evaluations,
-                selectedMove,
-                Collections.emptyList(),
-                Collections.emptyList(),
-                false
-        );
+        return new StrategyAnalysis(botColour, humanColour, botMovesToWin, humanMovesToWin, evaluations,
+                chosenMove, Collections.emptyList(), Collections.emptyList(), isFallback);
     }
 
     private int findShortestWinDistance(Color colour, int[][] dist, QuaxController controller) {

@@ -11,7 +11,6 @@ import javafx.scene.shape.Polygon;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -108,6 +107,7 @@ public class QuaxController {
                 return costComparison;
             }
 
+            // Use coordinates as a tie-breaker for consistent pathfinding
             int rowComparison = Integer.compare(this.row, other.row);
             if (rowComparison != 0) {
                 return rowComparison;
@@ -136,23 +136,47 @@ public class QuaxController {
     }
 
     public int[] getCoordinateFromId(String id) {
+        // Extract index from ID
         int number = Integer.parseInt(id.replaceAll("\\D", "")) - 1;
 
+        // Octagons have even coordinates
         if (id.startsWith("OctCell")) {
             return new int[]{(number / BOARD_SIZE) * 2, (number % BOARD_SIZE) * 2};
         }
+        // Rhombuses have odd coordinates
         return new int[]{((number / RHO_SIZE) * 2) + 1, ((number % RHO_SIZE) * 2) + 1};
     }
 
-    PathSearchResult runDijkstraSearch(Color colour, boolean fromStart) {
+    PathSearchResult runDijkstraSearch(Color botColour, boolean fromStart) {
         PathSearchResult result = new PathSearchResult(QuaxBoard.SIZE);
         PriorityQueue<PathNode> queue = new PriorityQueue<>();
-        boolean isBlack = (colour == Color.BLACK);
+        boolean isBlack = (botColour == Color.BLACK);
         Color humanColour = isBlack ? Color.WHITE : Color.BLACK;
 
+        initialiseStartingEdge(result, queue, botColour, humanColour, isBlack, fromStart);
+
+        while (!queue.isEmpty()) {
+            PathNode current = queue.poll();
+
+            // Skip if better path already found
+            if (current.cost > result.dist[current.row][current.col]) {
+                continue;
+            }
+
+            for (int[] neighbour : getNeighbourCoordinates(current.row, current.col)) {
+                updateNeighbour(current, neighbour, result, queue, botColour, humanColour);
+            }
+        }
+        return result;
+    }
+
+    private void initialiseStartingEdge(PathSearchResult result, PriorityQueue<PathNode> queue,
+                                        Color botColour, Color humanColour, boolean isBlack, boolean fromStart) {
         for (int index = 0; index < BOARD_SIZE; index++) {
             int row;
             int col;
+
+            // Defines starting edge depending on player's colour
             if (isBlack) {
                 row = fromStart ? 0 : MAX_COORD;
                 col = index * 2;
@@ -163,53 +187,45 @@ public class QuaxController {
 
             String cellId = getCellIdFromCoordinate(row, col);
             Polygon polygon = cellMap.get(cellId);
+
+            // Skip invalid paths or tiles blocked by human
             if (polygon == null || isCellOwnedBy(cellId, humanColour)) {
                 continue;
             }
 
-            int tileCost = isCellOwnedBy(cellId, colour) ? 0 : 1;
+            // Owned tiles cost 0, empty tiles cost 1 to occupy
+            int tileCost = isCellOwnedBy(cellId, botColour) ? 0 : 1;
             result.dist[row][col] = tileCost;
             queue.add(new PathNode(row, col, tileCost));
         }
+    }
 
-        while (!queue.isEmpty()) {
-            PathNode current = queue.poll();
-            if (current.cost > result.dist[current.row][current.col]) {
-                continue;
-            }
+    private void updateNeighbour(PathNode current, int[] neighbour, PathSearchResult result,
+                                 PriorityQueue<PathNode> queue, Color botColour, Color humanColour) {
+        int nextRow = neighbour[0];
+        int nextCol = neighbour[1];
+        String nextId = getCellIdFromCoordinate(nextRow, nextCol);
 
-            for (int[] neighbour : getNeighbourCoordinates(current.row, current.col)) {
-                int nextRow = neighbour[0];
-                int nextCol = neighbour[1];
-                String nextId = getCellIdFromCoordinate(nextRow, nextCol);
+        if (isCellOwnedBy(nextId, humanColour)) { return; }
 
-                if (isCellOwnedBy(nextId, humanColour)) {
-                    continue;
-                }
+        int tileCost = isCellOwnedBy(nextId, botColour) ? 0 : 1;
+        int newDistance = result.dist[current.row][current.col] + tileCost;
 
-                int tileCost = isCellOwnedBy(nextId, colour) ? 0 : 1;
-                int newDistance = result.dist[current.row][current.col] + tileCost;
-                if (newDistance < result.dist[nextRow][nextCol]) {
-                    result.dist[nextRow][nextCol] = newDistance;
-                    result.prevRow[nextRow][nextCol] = current.row;
-                    result.prevCol[nextRow][nextCol] = current.col;
-                    queue.add(new PathNode(nextRow, nextCol, newDistance));
-                }
-            }
+        // Update if new path is shorter than the known shortest path
+        if (newDistance < result.dist[nextRow][nextCol]) {
+            result.dist[nextRow][nextCol] = newDistance;
+            result.prevRow[nextRow][nextCol] = current.row;
+            result.prevCol[nextRow][nextCol] = current.col;
+            queue.add(new PathNode(nextRow, nextCol, newDistance));
         }
-        return result;
     }
 
     @FXML
     void handleCellClick(MouseEvent event) {
-        if (gameOver) {
-            return;
-        }
+        if (gameOver) { return; }
 
         Polygon clickedCell = (Polygon) event.getSource();
-        if (cellIsOccupied(clickedCell)) {
-            return;
-        }
+        if (cellIsOccupied(clickedCell)) { return; }
 
         showStrategy.clearAnalysis();
         Color currentColour = placePiece(clickedCell);
@@ -344,7 +360,6 @@ public class QuaxController {
                 }
             }
         }
-
         return visited;
     }
 
