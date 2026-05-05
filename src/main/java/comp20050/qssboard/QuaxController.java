@@ -56,6 +56,14 @@ public class QuaxController {
     public static final int MAX_COORD = GRID_SIZE - 1;
     public static final int MAX_DISTANCE = 10000;
 
+    private static final int[][] CHAIN_DIRECT_OFFSETS = {
+            {0, 1}, {0, -1}, {1, 0}, {-1, 0}
+    };
+
+    private static final int[][] CHAIN_DIAGONAL_OFFSETS = {
+            {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
+    };
+
     @FXML
     private void botMove() {
         if (gameOver) {
@@ -312,55 +320,118 @@ public class QuaxController {
         List<String> visited = new ArrayList<>();
         Queue<String> queue = new LinkedList<>();
 
-        if (!startCellID.startsWith("OctCell") || !isCellOwnedBy(startCellID, playerColor)) {
+        if (!canStartChain(startCellID, playerColor)) {
             return visited;
         }
 
-        queue.add(startCellID);
-        visited.add(startCellID);
-
+        addCellToChain(visited, queue, startCellID);
         while (!queue.isEmpty()) {
-            String current = queue.poll();
-            int id = Integer.parseInt(current.replace("OctCell", ""));
-            int[] rowCol = octToRowCol(id);
-            int row = rowCol[0];
-            int col = rowCol[1];
-
-            int[][] directOffsets = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-            for (int[] offset : directOffsets) {
-                int nextRow = row + offset[0];
-                int nextCol = col + offset[1];
-                if (nextRow < 0 || nextRow > LAST_INDEX || nextCol < 0 || nextCol > LAST_INDEX) {
-                    continue;
-                }
-
-                String nextId = "OctCell" + rowColToOct(nextRow, nextCol);
-                if (!visited.contains(nextId) && isCellOwnedBy(nextId, playerColor)) {
-                    visited.add(nextId);
-                    queue.add(nextId);
-                }
-            }
-
-            int[][] diagonalOffsets = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
-            for (int[] offset : diagonalOffsets) {
-                int nextRow = row + offset[0];
-                int nextCol = col + offset[1];
-                if (nextRow < 0 || nextRow > LAST_INDEX || nextCol < 0 || nextCol > LAST_INDEX) {
-                    continue;
-                }
-
-                int rhoId = getRhoCellID(row, col, nextRow, nextCol);
-                String rhombusId = "RhoCell" + rhoId;
-                String nextId = "OctCell" + rowColToOct(nextRow, nextCol);
-                if (!visited.contains(nextId)
-                        && isCellOwnedBy(rhombusId, playerColor)
-                        && isCellOwnedBy(nextId, playerColor)) {
-                    visited.add(nextId);
-                    queue.add(nextId);
-                }
-            }
+            addConnectedNeighbours(visited, queue, queue.poll(), playerColor);
         }
         return visited;
+    }
+
+    private boolean canStartChain(String startCellID, Color playerColor) {
+        return startCellID.startsWith("OctCell") && isCellOwnedBy(startCellID, playerColor);
+    }
+
+    private void addConnectedNeighbours(
+            List<String> visited,
+            Queue<String> queue,
+            String current,
+            Color playerColor
+    ) {
+        int[] rowCol = getRowColFromOctId(current);
+        addDirectNeighbours(visited, queue, rowCol, playerColor);
+        addDiagonalNeighbours(visited, queue, rowCol, playerColor);
+    }
+
+    private int[] getRowColFromOctId(String octCellId) {
+        int id = Integer.parseInt(octCellId.replace("OctCell", ""));
+        return octToRowCol(id);
+    }
+
+    private void addDirectNeighbours(
+            List<String> visited,
+            Queue<String> queue,
+            int[] rowCol,
+            Color playerColor
+    ) {
+        for (int[] offset : CHAIN_DIRECT_OFFSETS) {
+            int[] nextRowCol = offsetRowCol(rowCol, offset);
+            String nextId = getOctCellId(nextRowCol);
+
+            if (isDirectNeighbour(nextRowCol, nextId, visited, playerColor)) {
+                addCellToChain(visited, queue, nextId);
+            }
+        }
+    }
+
+    private boolean isDirectNeighbour(
+            int[] nextRowCol,
+            String nextId,
+            List<String> visited,
+            Color playerColor
+    ) {
+        return isRowColOnBoard(nextRowCol)
+                && !visited.contains(nextId)
+                && isCellOwnedBy(nextId, playerColor);
+    }
+
+    private void addDiagonalNeighbours(
+            List<String> visited,
+            Queue<String> queue,
+            int[] rowCol,
+            Color playerColor
+    ) {
+        for (int[] offset : CHAIN_DIAGONAL_OFFSETS) {
+            int[] nextRowCol = offsetRowCol(rowCol, offset);
+            String nextId = getOctCellId(nextRowCol);
+
+            if (isDiagonalNeighbour(rowCol, nextRowCol, nextId, visited, playerColor)) {
+                addCellToChain(visited, queue, nextId);
+            }
+        }
+    }
+
+    private boolean isDiagonalNeighbour(
+            int[] rowCol,
+            int[] nextRowCol,
+            String nextId,
+            List<String> visited,
+            Color playerColor
+    ) {
+        if (!isRowColOnBoard(nextRowCol) || visited.contains(nextId)) {
+            return false;
+        }
+
+        String rhombusId = getRhombusId(rowCol, nextRowCol);
+        return isCellOwnedBy(rhombusId, playerColor) && isCellOwnedBy(nextId, playerColor);
+    }
+
+    private int[] offsetRowCol(int[] rowCol, int[] offset) {
+        return new int[]{rowCol[0] + offset[0], rowCol[1] + offset[1]};
+    }
+
+    private String getOctCellId(int[] rowCol) {
+        return "OctCell" + rowColToOct(rowCol[0], rowCol[1]);
+    }
+
+    private String getRhombusId(int[] rowCol, int[] nextRowCol) {
+        int rhoId = getRhoCellID(rowCol[0], rowCol[1], nextRowCol[0], nextRowCol[1]);
+        return "RhoCell" + rhoId;
+    }
+
+    private boolean isRowColOnBoard(int[] rowCol) {
+        return rowCol[0] >= 0
+                && rowCol[0] <= LAST_INDEX
+                && rowCol[1] >= 0
+                && rowCol[1] <= LAST_INDEX;
+    }
+
+    private void addCellToChain(List<String> visited, Queue<String> queue, String cellId) {
+        visited.add(cellId);
+        queue.add(cellId);
     }
 
     public boolean isBlackConnectedTopToBottom() {
